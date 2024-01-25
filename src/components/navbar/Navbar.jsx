@@ -1,5 +1,4 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import bgNavbar from '../../assets/bgNavbar.jpg';
 import iconMgtu from '../../assets/iconMgtu.png'
@@ -8,7 +7,7 @@ import { Box, Link } from '@mui/material';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
+import TranslateOutlinedIcon from '@mui/icons-material/TranslateOutlined';
 
 const useStyles = makeStyles((theme) => ({
   navbarStyle: {
@@ -16,8 +15,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center', 
-    color: 'white',
     borderRadius: "20px",
+    color: 'white',
+
+
   },
 }));
 
@@ -26,7 +27,7 @@ export default function Navbar() {
   const classes = useStyles();
 
   return (
-      <AppBar position="static" className={classes.navbarStyle}>
+      <Box position="static" className={classes.navbarStyle}>
         <Toolbar sx={{
           px: '32px',
           py: '20px',
@@ -45,13 +46,13 @@ export default function Navbar() {
             justifyContent: 'space-between',
             gap: '1.5vw'
           }}>
-            <LanguageOutlinedIcon sx={{fontSize: 48}}></LanguageOutlinedIcon>
+            <TranslateOutlinedIcon sx={{fontSize: 48}}></TranslateOutlinedIcon>
             <SearchOutlinedIcon sx={{fontSize: 48}}></SearchOutlinedIcon>
             <DarkModeOutlinedIcon sx={{fontSize: 48}}></DarkModeOutlinedIcon>
             <AccountCircleOutlinedIcon sx={{fontSize: 48}}></AccountCircleOutlinedIcon>
           </Box>
           
         </Toolbar>
-      </AppBar>
+      </Box>
   );
 }

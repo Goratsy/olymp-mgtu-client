@@ -6,16 +6,21 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-
+import { Box } from '@mui/material';
 
 function App() {
   return (
-    <div>
-      <div>
-        <Navbar></Navbar>
-        <Banner></Banner>
-      </div>
-    </div>
+    <Box sx={{
+      display: 'flex',
+      flexDirection: "column",
+      gap: "30px",
+      pt: "30px",
+      // Исправить отступы
+    }}>
+      <Navbar></Navbar>
+      <Banner></Banner>
+    </Box>
+      
   );
 }
 
