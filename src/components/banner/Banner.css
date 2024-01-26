@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Pobeda';
+    src: url('../../fonts/pobeda/pobeda-regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Pobeda';
+    src: url('../../fonts/pobeda/pobeda-bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}

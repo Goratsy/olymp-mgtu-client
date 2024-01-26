@@ -13,9 +13,8 @@ function App() {
     <Box sx={{
       display: 'flex',
       flexDirection: "column",
-      gap: "30px",
-      pt: "30px",
-      // Исправить отступы
+      gap: "12px",
+      pt: "12px",
     }}>
       <Navbar></Navbar>
       <Banner></Banner>
