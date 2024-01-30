@@ -17,8 +17,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center', 
     borderRadius: "20px",
     color: 'white',
-
-
+    
   },
 }));
 
@@ -27,7 +26,7 @@ export default function Navbar() {
   const classes = useStyles();
 
   return (
-      <Box position="static" className={classes.navbarStyle}>
+      <Box position="static" className={classes.navbarStyle} sx={{mb: '12px'}}>
         <Toolbar sx={{
           px: '32px',
           py: '20px',

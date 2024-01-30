@@ -5,6 +5,7 @@ import bgBanner from '../../assets/bgBanner.jpg';
 import ButtonContained from '../buttonContained/buttonContained';
 import LanguageOutlinedIcon from '@mui/icons-material/LanguageOutlined';
 import './Banner.css';
+import { useTheme } from '@emotion/react';
 
 const useStyles = makeStyles((theme) => ({
     bannerStyle: {
@@ -18,6 +19,9 @@ const useStyles = makeStyles((theme) => ({
 
 function Banner() {
     const classes = useStyles();
+    const theme = useTheme();
+    const colorMainText = theme.palette.primary.violet_main;
+
 
     return (
         <Box className={classes.bannerStyle} sx={{
@@ -27,7 +31,7 @@ function Banner() {
             flexDirection: 'column',
             gap: '12px'
         }}>
-            <Typography sx={{color:'#6750A4', fontWeight: 'normal'}}>Подготовка к олимпиаде</Typography>
+            <Typography sx={{color: colorMainText, fontWeight: 'normal'}}>Подготовка к олимпиаде</Typography>
 
             <Box>
                 <Typography variant='h1' style={{fontFamily: 'Pobeda'}} sx={{fontWeight:'bold', fontSize: '80px'}}>{'Шаг в будущее'}</Typography>

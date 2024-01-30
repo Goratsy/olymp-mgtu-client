@@ -3,21 +3,22 @@ import { Button } from "@mui/material";
 import React from "react";
 
 
-function ButtonContained(props) {
+function ButtonOutlined(props) {
     const theme = useTheme();
     const bgColorButton = theme.palette.primary.violet_main;
     const bgColorHoverButton = theme.palette.primary.violet_light;
 
     return (
-        <Button {...props} sx={{
-            backgroundColor: bgColorButton,
-            color: 'white',
+        <Button variant="outlined" {...props} sx={{
+            borderColor: bgColorButton,
+            color: bgColorButton,
             py: '10px',
             px: '24px',
             borderRadius: '100px',
             textTransform: 'capitalize',
             ':hover': {
-                backgroundColor: bgColorHoverButton,
+                borderColor: bgColorHoverButton,
+                color: bgColorHoverButton,
             }
         }}>
             {props.children}
@@ -25,4 +26,4 @@ function ButtonContained(props) {
     );
 }
 
-export default ButtonContained;
+export default ButtonOutlined;
