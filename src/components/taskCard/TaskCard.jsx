@@ -32,7 +32,7 @@ function TaskCard({task, index}) {
                 <Typography sx={{color: 'black', fontSize: 'large'}}>Задача {index}</Typography>
                 <Box sx={{color: '#49454F'}}>
 
-                    <Typography  sx={{overflow: 'hidden', whiteSpace:'', textOverflow: 'ellipsis'}}>{task.description.slice(0, 85)+'...'}</Typography>    
+                    <Typography  sx={{overflow: 'hidden', whiteSpace:'', textOverflow: 'ellipsis'}}>{task.description.slice(0, 130)+'...'}</Typography>    
                 </Box>
             </Box>
             <Box>
