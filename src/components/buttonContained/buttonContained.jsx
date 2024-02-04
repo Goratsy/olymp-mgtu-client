@@ -5,21 +5,25 @@ import React from "react";
 
 function ButtonContained(props) {
     const theme = useTheme();
-    const bgColorButton = theme.palette.primary.violet_main;
-    const bgColorHoverButton = theme.palette.primary.violet_light;
-
+    const bgColorButton = theme.palette.violet.main;
+    const bgColorHoverButton = theme.palette.violet.light;
+    const buttonStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: bgColorButton,
+        color: 'white',
+        py: '10px',
+        px: '24px',
+        borderRadius: '100px',
+        textTransform: 'none',
+        ':hover': {
+            backgroundColor: bgColorHoverButton,
+        }
+    }
+    
     return (
-        <Button {...props} sx={{
-            backgroundColor: bgColorButton,
-            color: 'white',
-            py: '10px',
-            px: '24px',
-            borderRadius: '100px',
-            textTransform: 'capitalize',
-            ':hover': {
-                backgroundColor: bgColorHoverButton,
-            }
-        }}>
+        <Button {...props} sx={buttonStyle}>
             {props.children}
         </Button>
     );

@@ -5,22 +5,23 @@ import React from "react";
 
 function ButtonOutlined(props) {
     const theme = useTheme();
-    const bgColorButton = theme.palette.primary.violet_main;
-    const bgColorHoverButton = theme.palette.primary.violet_light;
+    const bgColorButton = theme.palette.violet.main;
+    const bgColorHoverButton = theme.palette.violet.light;
 
+    const buttonStyle = {
+        borderColor: bgColorButton,
+        color: bgColorButton,
+        py: '10px',
+        px: '24px',
+        borderRadius: '100px',
+        textTransform: 'none',
+        ':hover': {
+            borderColor: bgColorHoverButton,
+            color: bgColorHoverButton,
+        }
+    }
     return (
-        <Button variant="outlined" {...props} sx={{
-            borderColor: bgColorButton,
-            color: bgColorButton,
-            py: '10px',
-            px: '24px',
-            borderRadius: '100px',
-            textTransform: 'capitalize',
-            ':hover': {
-                borderColor: bgColorHoverButton,
-                color: bgColorHoverButton,
-            }
-        }}>
+        <Button variant="outlined" {...props} sx={buttonStyle}>
             {props.children}
         </Button>
     );
