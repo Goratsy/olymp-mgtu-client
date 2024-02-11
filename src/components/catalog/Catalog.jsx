@@ -1,5 +1,5 @@
 import { Box,Grid,Typography, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TaskCard from "../taskCard/TaskCard";
 import { useTheme } from "@emotion/react";
 import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
@@ -109,6 +109,14 @@ function Catalog() {
         display: (isShowAnswer ? 'none' : 'block')
     }
 
+    const [testData, setTestData] = useState();
+    useEffect(() => {
+        fetch('/test')
+        .then((data) => data.json())
+        .then((res) => setTestData(res))
+        .catch(err => {console.log(err);});
+    }, []);
+    
     return(
         <Grid container spacing={3} columns={4}>
             <Grid item xs={2}>
