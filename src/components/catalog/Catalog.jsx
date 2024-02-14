@@ -1,5 +1,9 @@
 import { Box,Grid,Typography, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
+
+import React, { useState } from "react";
+import TaskCard from "../taskCard/TaskCard";
+
 import { useTheme } from "@emotion/react";
 import TaskCard from "../taskCard/TaskCard";
 
@@ -24,6 +28,20 @@ function Catalog() {
             .catch(err => {console.log(err);});
         console.log(ArrayTasks);
     }, []);
+
+    let [isShowAnswer, setIsShowAnswer] = useState(true)
+
+    let groupTextFieldStyle = {
+        display: (isShowAnswer ? 'block' : 'none'),
+        width: '100%', 
+        mt: '12px',  
+    }
+
+    let solutionStyle = {
+        mt: '12px',  
+        width: '100%', 
+        display: (isShowAnswer ? 'none' : 'block')
+    }
 
     return(
         <Grid container spacing={3} columns={4}>
