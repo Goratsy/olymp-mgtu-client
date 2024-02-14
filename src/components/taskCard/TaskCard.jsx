@@ -40,7 +40,7 @@ function TaskCard({task, index}) {
                 <RemoveIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.grey.main}}></RemoveIcon> */}
             </Box>
             <Box>
-                <Typography  sx={labelMainStyle}>{task.difficult} • {task.yearTask}</Typography>
+                <Typography  sx={labelMainStyle}>{task.difficult} • {task.year}</Typography>
 
                 <Typography sx={bodyLargeStyle}>Задача {index}</Typography>
                 <Typography sx={descriptionStyle}>{task.description.slice(0, 130)+'...'}</Typography>    
