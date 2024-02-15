@@ -1,10 +1,8 @@
-import { useTheme } from "@emotion/react";
-import { Box, ToggleButtonGroup, ToggleButton, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import React from "react";
+import { Box, ToggleButtonGroup, ToggleButton, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 
 function Filters() {
-    const theme = useTheme();
 
     const filterStyle = {
         display: 'flex',
@@ -13,15 +11,16 @@ function Filters() {
         alignItems: 'center',
         my: '30px',
     };
-    const formControlStyle = {
-        width: {md: '12%', xs: '100%'}, 
-        // borderRadius: '0px',
-        // color: theme.palette.grey.dark,
-    }
-    const selectStyle = {
-        // p: '10px',
-        // borderRadius: '2px solid #ccc'
-    }
+    // const formControlStyle = {
+    //     width: {md: '12%', xs: '100%'}, 
+    //     // borderRadius: '0px',
+    //     // color: theme.palette.grey.dark,
+    // }
+    // const selectStyle = {
+    //     // p: '10px',
+    //     // borderRadius: '2px solid #ccc'
+    // }
+
     const [view, setView] = React.useState('');
     const handleChange1 = (event, nextView) => {
         setView(nextView);
