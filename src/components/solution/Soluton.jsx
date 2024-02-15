@@ -30,6 +30,11 @@ function Solution({task, index}) {
         ...theme.typography.titles.medium,
         color: theme.palette.black.main
     }
+
+    const bodyLargeStyle = {
+        ...theme.typography.body.large,
+        color: theme.palette.grey.dark
+    }
     
     const bodyMainStyle = {
         ...theme.typography.body.main,
@@ -102,10 +107,10 @@ function Solution({task, index}) {
                         {task.difficult} • {task.year}</Typography>
                 </Box>
                 
-                <Box sx={{display: 'flex', justifyContent: 'space-between', gap: '20px'}}>
+                <Box sx={{display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap'}}>
                     {task.imageTasks.map((a, b) => {
                         return (
-                            <img src={a} alt={`Изображение ${b+1}`} style={{width: '50%'}} key={`image ${b}`}/>
+                            <img src={a} alt={`Изображение ${b+1}`} style={{width: '100%'}} key={`image ${b}`}/>                         
                         )
                     })}
                 </Box>
@@ -124,20 +129,21 @@ function Solution({task, index}) {
                     </Box>
 
                     <Box sx={answerStyle}>
-                        {/* Здесь распологается решение присланное из сервера */}
-                        <div>
-                            <p>Запишем уравнения динамики для каждого груза в первом случае.</p>
-                            <img src={answerImageAnswerTest} style={{width: '30vw'}} alt=""/> 
-                        </div>
-                        <div>
-                            <p>Запишем уравнения динамики для каждого груза в первом случае.</p>
-                            <img src={answerImageAnswerTest} style={{width: '30vw'}} alt=""/> 
-                        </div>
-                        <div>
-                            <p>Запишем уравнения динамики для каждого груза в первом случае.</p>
-                            <img src={answerImageAnswerTest} style={{width: '30vw'}} alt=""/> 
-                        </div>
-                        
+                        {task.solution.map((array, index) => {
+                            return (
+                                <Box sx={{mt: '20px'}}>
+                                    {
+                                    array.map((text, index2) => {
+                                        if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}>{text}</Typography>
+                                        else {
+                                            return <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`}
+                                            key={`solutionText ${index}.${index2}`} style={{width: '55%', mixBlendMode: 'multiply'}}/>
+                                            }
+                                    })
+                                    }
+                                </Box>
+                            );
+                        })}
                     </Box>
                 </Box>
                 <Box sx={buttonGroupStyle}>
