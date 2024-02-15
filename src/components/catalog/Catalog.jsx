@@ -22,7 +22,7 @@ function Catalog() {
     const [ArrayTasks, setArrayTasks] = useState([]);
     
     useEffect(() => {
-        fetch('/test')
+        fetch('/allTasks')
             .then((data) => data.json())
             .then((res) => setArrayTasks(res))
             .catch(err => {console.log(err);});
