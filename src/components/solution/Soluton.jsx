@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Box,Grid,Typography, TextField } from "@mui/material";
+import React, { useState } from "react";
+import { Box,Typography, TextField } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
 import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
 import ButtonOutlined from "../buttonOutlined/buttonOutlined";
 import ButtonContained from "../buttonContained/buttonContained";
 import Alert from '@mui/material/Alert';
-import imageTaskTest from '../../assets/tasks/1.png';
 import answerImageAnswerTest from '../../assets/tasks/answerImage/answer1.png';
 
 function Solution({task, index}) {
@@ -14,7 +13,7 @@ function Solution({task, index}) {
     const bgCard = theme.palette.violet.light;
 
     let [showAlert, setShowAlert] = useState(false);
-    let [isShowAnswer, setIsShowAnswer] = useState(true);
+    let [isShowAnswer, setIsShowAnswer] = useState(false);
 
     const taskStyle = {
         display: 'flex',
@@ -128,15 +127,15 @@ function Solution({task, index}) {
                         {/* Здесь распологается решение присланное из сервера */}
                         <div>
                             <p>Запишем уравнения динамики для каждого груза в первом случае.</p>
-                            <img src={answerImageAnswerTest} style={{width: '30vw'}}/> 
+                            <img src={answerImageAnswerTest} style={{width: '30vw'}} alt=""/> 
                         </div>
                         <div>
                             <p>Запишем уравнения динамики для каждого груза в первом случае.</p>
-                            <img src={answerImageAnswerTest} style={{width: '30vw'}}/> 
+                            <img src={answerImageAnswerTest} style={{width: '30vw'}} alt=""/> 
                         </div>
                         <div>
                             <p>Запишем уравнения динамики для каждого груза в первом случае.</p>
-                            <img src={answerImageAnswerTest} style={{width: '30vw'}}/> 
+                            <img src={answerImageAnswerTest} style={{width: '30vw'}} alt=""/> 
                         </div>
                         
                     </Box>
@@ -149,7 +148,7 @@ function Solution({task, index}) {
             </Box>
             <Box>
                 <Box sx={{display: 'flex', flexDirection: 'row',  gap: '12px'}}>
-                    {index == 1 ? '' :
+                    {index === 1 ? '' :
                     (<Box sx={linkToTask}>
                         <Box sx={cardLinkToNextTaskStyle}>
                             <SkipPreviousOutlinedIcon sx={{fontSize:'24px',}}></SkipPreviousOutlinedIcon>

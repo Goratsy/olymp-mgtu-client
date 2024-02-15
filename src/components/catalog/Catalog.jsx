@@ -1,18 +1,9 @@
-import { Box,Grid,Typography, TextField } from "@mui/material";
+import { Box, Grid} from "@mui/material";
 import React, { useEffect, useState } from "react";
-
-import React, { useState } from "react";
 import TaskCard from "../taskCard/TaskCard";
-
-import { useTheme } from "@emotion/react";
-import TaskCard from "../taskCard/TaskCard";
-
 import Solution from "../solution/Soluton";
 
 function Catalog() {
-    const theme = useTheme();
-    const bgCard = theme.palette.violet.light;
-
     const catalogStyle = {
         borderRadius: '12px',
         overflow: 'hidden'
@@ -26,35 +17,21 @@ function Catalog() {
             .then((data) => data.json())
             .then((res) => setArrayTasks(res))
             .catch(err => {console.log(err);});
-        console.log(ArrayTasks);
+        console.log(ArrayTasks); 
     }, []);
-
-    let [isShowAnswer, setIsShowAnswer] = useState(true)
-
-    let groupTextFieldStyle = {
-        display: (isShowAnswer ? 'block' : 'none'),
-        width: '100%', 
-        mt: '12px',  
-    }
-
-    let solutionStyle = {
-        mt: '12px',  
-        width: '100%', 
-        display: (isShowAnswer ? 'none' : 'block')
-    }
 
     return(
         <Grid container spacing={3} columns={4}>
             <Grid item xs={2}>
                 <Box sx={catalogStyle}>
-                    {ArrayTasks.length == 0 ? 'Loading...' : ArrayTasks.map((a, b) => {
+                    {ArrayTasks.length === 0 ? 'Loading...' : ArrayTasks.map((a, b) => {
                         console.log(a, b);
                         return (<TaskCard task={a} index={b+1} key={a._id}></TaskCard>)
                     })}
                 </Box>
             </Grid>
             <Grid item xs={2}>
-                {ArrayTasks.length == 0 ? 'Loading...' : <Solution task={ArrayTasks[indexSolution]} index={indexSolution+1}></Solution>}
+                {ArrayTasks.length === 0 ? 'Loading...' : <Solution task={ArrayTasks[indexSolution]} index={indexSolution+1}></Solution>}
                 
             </Grid>
         </Grid>
