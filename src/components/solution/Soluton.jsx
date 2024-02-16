@@ -16,7 +16,7 @@ function Solution({task, index}) {
 
     let [showAlert, setShowAlert] = useState(false);
     let [isShowAnswer, setIsShowAnswer] = useState(false);
-    let [isCloseWindowSolution, setIsCloseWindowSolution] = useState(false);
+    
 
     const taskStyle = {
         display: 'flex',
@@ -102,8 +102,10 @@ function Solution({task, index}) {
         display: (isShowAnswer ? 'none' : 'block')
     }
 
+    let [isOpenWindowSolution, setIsOpenWindowSolution] = useState(true);
+    let [isOpenSuccessAlert, setIsOpenSuccessAlert] = useState(true);
 
-    let CloseWindowSolution = () => {setIsCloseWindowSolution(!isCloseWindowSolution)};
+    let toggleWindowSolution = () => {setIsOpenWindowSolution(!isOpenWindowSolution)};
 
     return(
         <>
@@ -114,11 +116,11 @@ function Solution({task, index}) {
                         <Typography sx={bodyMainStyle}>
                             {task.difficult} • {task.year}</Typography>
                     </Box>
-                    <IconButton onClick={CloseWindowSolution}>
-                        {isCloseWindowSolution ? <KeyboardArrowDownIcon fontSize="large"></KeyboardArrowDownIcon> : <KeyboardArrowUpIcon fontSize="large"></KeyboardArrowUpIcon>}
+                    <IconButton onClick={toggleWindowSolution}>
+                        {isOpenWindowSolution ? <KeyboardArrowUpIcon fontSize="large"></KeyboardArrowUpIcon> : <KeyboardArrowDownIcon fontSize="large"></KeyboardArrowDownIcon>}
                     </IconButton>
                 </Box>
-                <span style={{display: (!isCloseWindowSolution ? 'block' : 'none')}}>
+                <Box variant='span' style={{display: (isOpenWindowSolution ? 'block' : 'none')}}>
                     <Box sx={{display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap'}}>
                         {task.imageTasks.map((a, b) => {
                             return (
@@ -134,7 +136,9 @@ function Solution({task, index}) {
                     </Box>
 
                     <Box sx={solutionStyle}>
-                        <Alert icon={false} severity="success" sx={{borderRadius: '12px'}} onClose={() => {console.log('closed');}}>🥳  Правильный ответ</Alert>
+                        <Box variant='span' sx={{display: (isOpenSuccessAlert ? 'block' : 'none')}}>
+                            <Alert icon={false} severity="success" sx={{borderRadius: '12px', }} onClose={() => {setIsOpenSuccessAlert(false)}}>🥳  Правильный ответ</Alert>
+                        </Box>
                         <Box sx={{my: '16px'}}>
                             <Typography sx={titleMediumStyle}>Решение</Typography>
                             <Typography sx={bodyMainStyle}>Ответ: {task.answer}</Typography>
@@ -149,7 +153,7 @@ function Solution({task, index}) {
                                             if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}>{text}</Typography>
                                             else {
                                                 return <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"
-                                                key={`solutionText ${index}.${index2}`} style={{mixBlendMode: 'multiply'}} sx={{width: {md: '70%', xs: '90%'},}}/>
+                                                key={`solutionText ${index}.${index2}`} style={{width: {md: '70%', xs: '90%'}, mixBlendMode: 'multiply'}}/>
                                                 }
                                         })
                                         }
@@ -163,7 +167,7 @@ function Solution({task, index}) {
                         <ButtonContained>Проверить ответ</ButtonContained>
                         {/* <ButtonOutlined>Скрыть решение</ButtonOutlined> */}
                     </Box>
-                </span>
+                </Box>
             </Box>
             
             <Box>
