@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box,Typography, TextField } from "@mui/material";
+import { Box,Typography, TextField, IconButton } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
 import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
@@ -7,6 +7,8 @@ import ButtonOutlined from "../buttonOutlined/buttonOutlined";
 import ButtonContained from "../buttonContained/buttonContained";
 import Alert from '@mui/material/Alert';
 import answerImageAnswerTest from '../../assets/tasks/answerImage/answer1.png';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 function Solution({task, index}) {
     const theme = useTheme();
@@ -14,6 +16,7 @@ function Solution({task, index}) {
 
     let [showAlert, setShowAlert] = useState(false);
     let [isShowAnswer, setIsShowAnswer] = useState(false);
+    let [isCloseWindowSolution, setIsCloseWindowSolution] = useState(false);
 
     const taskStyle = {
         display: 'flex',
@@ -47,9 +50,10 @@ function Solution({task, index}) {
     } 
     
     const buttonGroupStyle = {
-        display: 'flex', 
+        display: 'flex',
+        flexWrap: 'wrap', 
         gap: '8px', 
-        justifyContent: 'flex-end', 
+        justifyContent: {md: 'flex-end', xs: 'flex-start'}, 
         mt: '20px'
     }
     
@@ -98,60 +102,70 @@ function Solution({task, index}) {
         display: (isShowAnswer ? 'none' : 'block')
     }
 
+
+    let CloseWindowSolution = () => {setIsCloseWindowSolution(!isCloseWindowSolution)};
+
     return(
         <>
             <Box sx={taskStyle}>
-                <Box>
-                    <Typography sx={titleMediumStyle}>Задача {index}</Typography>
-                    <Typography sx={bodyMainStyle}>
-                        {task.difficult} • {task.year}</Typography>
-                </Box>
-                
-                <Box sx={{display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap'}}>
-                    {task.imageTasks.map((a, b) => {
-                        return (
-                            <img src={a} alt={`Изображение ${b+1}`} style={{width: '100%'}} key={`image ${b}`}/>                         
-                        )
-                    })}
-                </Box>
-                <Typography sx={descriptionStyle}>{task.description}</Typography>
-
-                <Box sx={groupTextFieldStyle}>
-                    <TextField id="" label="Ответ" variant="outlined"  sx={{width: '100%'}}/>
-                    <Typography fontSize='small' sx={{color:'#B3261E', display: (showAlert ? 'block' : 'none')}}>😔  Неверный ответ. Проверьте решение</Typography>
-                </Box>
-
-                <Box sx={solutionStyle}>
-                    <Alert icon={false} severity="success" sx={{borderRadius: '12px'}} onClose={() => {console.log('closed');}}>🥳  Правильный ответ</Alert>
-                    <Box sx={{my: '16px'}}>
-                        <Typography sx={titleMediumStyle}>Решение</Typography>
-                        <Typography sx={bodyMainStyle}>Ответ: {task.answer}</Typography>
+                <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                    <Box>
+                        <Typography sx={titleMediumStyle}>Задача {index}</Typography>
+                        <Typography sx={bodyMainStyle}>
+                            {task.difficult} • {task.year}</Typography>
                     </Box>
-
-                    <Box sx={answerStyle}>
-                        {task.solution.map((array, index) => {
+                    <IconButton onClick={CloseWindowSolution}>
+                        {isCloseWindowSolution ? <KeyboardArrowDownIcon fontSize="large"></KeyboardArrowDownIcon> : <KeyboardArrowUpIcon fontSize="large"></KeyboardArrowUpIcon>}
+                    </IconButton>
+                </Box>
+                <span style={{display: (!isCloseWindowSolution ? 'block' : 'none')}}>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap'}}>
+                        {task.imageTasks.map((a, b) => {
                             return (
-                                <Box sx={{mt: '20px'}}>
-                                    {
-                                    array.map((text, index2) => {
-                                        if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}>{text}</Typography>
-                                        else {
-                                            return <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`}
-                                            key={`solutionText ${index}.${index2}`} style={{width: '55%', mixBlendMode: 'multiply'}}/>
-                                            }
-                                    })
-                                    }
-                                </Box>
-                            );
+                                <img src={a} alt={`Изображение ${b+1}`} style={{width: '100%'}} key={`image ${b}`}/>                         
+                            )
                         })}
                     </Box>
-                </Box>
-                <Box sx={buttonGroupStyle}>
-                    <ButtonOutlined>Показать решение</ButtonOutlined>
-                    <ButtonContained>Проверить ответ</ButtonContained>
-                    {/* <ButtonOutlined>Скрыть решение</ButtonOutlined> */}
-                </Box>
+                    <Typography sx={descriptionStyle}>{task.description}</Typography>
+
+                    <Box sx={groupTextFieldStyle}>
+                        <TextField id="" label="Ответ" variant="outlined"  sx={{width: '100%'}}/>
+                        <Typography fontSize='small' sx={{color:'#B3261E', display: (showAlert ? 'block' : 'none')}}>😔  Неверный ответ. Проверьте решение</Typography>
+                    </Box>
+
+                    <Box sx={solutionStyle}>
+                        <Alert icon={false} severity="success" sx={{borderRadius: '12px'}} onClose={() => {console.log('closed');}}>🥳  Правильный ответ</Alert>
+                        <Box sx={{my: '16px'}}>
+                            <Typography sx={titleMediumStyle}>Решение</Typography>
+                            <Typography sx={bodyMainStyle}>Ответ: {task.answer}</Typography>
+                        </Box>
+
+                        <Box sx={answerStyle}>
+                            {task.solution.map((array, index) => {
+                                return (
+                                    <Box sx={{mt: '20px'}} key={`div ${index}`}>
+                                        {
+                                        array.map((text, index2) => {
+                                            if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}>{text}</Typography>
+                                            else {
+                                                return <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"
+                                                key={`solutionText ${index}.${index2}`} style={{mixBlendMode: 'multiply'}} sx={{width: {md: '70%', xs: '90%'},}}/>
+                                                }
+                                        })
+                                        }
+                                    </Box>
+                                );
+                            })}
+                        </Box>
+                    </Box>
+                    <Box sx={buttonGroupStyle}>
+                        <ButtonOutlined>Показать решение</ButtonOutlined>
+                        <ButtonContained>Проверить ответ</ButtonContained>
+                        {/* <ButtonOutlined>Скрыть решение</ButtonOutlined> */}
+                    </Box>
+                </span>
             </Box>
+            
             <Box>
                 <Box sx={{display: 'flex', flexDirection: 'row',  gap: '12px'}}>
                     {index === 1 ? '' :

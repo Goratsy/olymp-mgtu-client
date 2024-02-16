@@ -39,8 +39,8 @@ export default function Navbar() {
   };
   const iconStyle = {
     fontSize: 48,
-    color: theme.palette.grey.light,
-    ':hover': {color: '#ffffff'},
+    color: '#fff',
+    ':hover': {color: theme.palette.grey.light},
     cursor: 'pointer',
     transition: '200ms ease'
   };
@@ -60,9 +60,9 @@ export default function Navbar() {
           </Link>
           <Box sx={groupIconsStyle}>
             <TranslateOutlinedIcon sx={iconStyle}></TranslateOutlinedIcon>
-            <SearchOutlinedIcon sx={iconStyle}></SearchOutlinedIcon>
+            {/* <SearchOutlinedIcon sx={iconStyle}></SearchOutlinedIcon> */}
             <DarkModeOutlinedIcon sx={iconStyle}></DarkModeOutlinedIcon>
-            <AccountCircleOutlinedIcon sx={accountIconStyle}></AccountCircleOutlinedIcon>
+            {/* <AccountCircleOutlinedIcon sx={accountIconStyle}></AccountCircleOutlinedIcon> */}
           </Box>
         </Toolbar>
       </Box>

@@ -28,7 +28,7 @@ function Banner() {
     }
     const bodyLarge2Style = {
         ...theme.typography.body.large,
-        width: 2/5,
+        width: {md: 2/5, xs: 1},
         color: theme.palette.black.light,
     }
     const h1Style = {

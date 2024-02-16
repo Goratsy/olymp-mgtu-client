@@ -21,7 +21,7 @@ function Catalog() {
     }, []);
 
     return(
-        <Grid container spacing={3} columns={4}>
+        <Grid container spacing={3} columns={{md: 4, xs: 2}}  direction={{md: "row", xs: 'column-reverse'}}>
             <Grid item xs={2}>
                 <Box sx={catalogStyle}>
                     {ArrayTasks.length === 0 ? 'Loading...' : ArrayTasks.map((a, b) => {
@@ -32,7 +32,6 @@ function Catalog() {
             </Grid>
             <Grid item xs={2}>
                 {ArrayTasks.length === 0 ? 'Loading...' : <Solution task={ArrayTasks[indexSolution]} index={indexSolution+1}></Solution>}
-                
             </Grid>
         </Grid>
     );
