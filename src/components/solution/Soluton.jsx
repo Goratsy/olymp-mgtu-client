@@ -14,9 +14,7 @@ function Solution({task, index}) {
     const theme = useTheme();
     const bgCard = theme.palette.violet.light;
 
-    let [showAlert, setShowAlert] = useState(false);
-    let [isShowAnswer, setIsShowAnswer] = useState(false);
-    
+    let [isIsHideAnswer, setIsHideAnswer] = useState(true);
 
     const taskStyle = {
         display: 'flex',
@@ -47,6 +45,7 @@ function Solution({task, index}) {
     const descriptionStyle = {
         ...theme.typography.body.main,
         color: theme.palette.grey.dark,
+        mt: '10px'
     } 
     
     const buttonGroupStyle = {
@@ -91,7 +90,7 @@ function Solution({task, index}) {
     }
     
     let groupTextFieldStyle = {
-        display: (isShowAnswer ? 'block' : 'none'),
+        display: (isIsHideAnswer ? 'block' : 'none'),
         width: '100%', 
         mt: '12px',  
     }
@@ -99,13 +98,54 @@ function Solution({task, index}) {
     let solutionStyle = {
         mt: '12px',  
         width: '100%', 
-        display: (isShowAnswer ? 'none' : 'block')
+        display: (isIsHideAnswer ? 'none' : 'block')
     }
 
     let [isOpenWindowSolution, setIsOpenWindowSolution] = useState(true);
-    let [isOpenSuccessAlert, setIsOpenSuccessAlert] = useState(true);
+    let [isShowSuccessAlert, setIsShowSuccessAlert] = useState(true);
+    let [isShowNotSuccessAlert, setIsShowNotSuccessAlert] = useState(false);
+    let [textNotSuccessAnswer, setTextNotSuccessAnswer] = useState('');
+    let [buttonHideSolution, setButtonHideSolution] = useState(true);
 
     let toggleWindowSolution = () => {setIsOpenWindowSolution(!isOpenWindowSolution)};
+
+    let showAnswer = () => {
+        setIsHideAnswer(false);
+        setIsShowSuccessAlert(false);
+    }
+
+    let checkAnswer = () => {
+        let isCorrectAnswer = null
+        // сделать валидацию
+        // проверить решал ли user задачу
+        try {
+            isCorrectAnswer = true // fetch
+        } catch (error) {
+            textNotSuccessAnswer = `Произошла ошибка ${error}`
+        }
+
+        if (isCorrectAnswer) {
+            setIsHideAnswer(false);
+        } else if (!isCorrectAnswer) {
+            setTextNotSuccessAnswer('😔  Неверный ответ. Проверьте решение');
+            setIsShowNotSuccessAlert(true);
+        }
+        // сохранить прогресс user
+    }
+
+    let resetSolve = () => {
+        setIsHideAnswer(true);
+        setTextNotSuccessAnswer('');
+        setButtonHideSolution(true)
+    }
+
+    let hideSolution = () => {
+        setIsHideAnswer(true);
+        setButtonHideSolution(false);
+        setTextNotSuccessAnswer('Чтобы начать заново нажмите на  «Показать решение» -> «Решить заново»');
+        setIsShowNotSuccessAlert(true);
+    }
+
 
     return(
         <>
@@ -131,13 +171,14 @@ function Solution({task, index}) {
                     <Typography sx={descriptionStyle}>{task.description}</Typography>
 
                     <Box sx={groupTextFieldStyle}>
-                        <TextField id="" label="Ответ" variant="outlined"  sx={{width: '100%'}}/>
-                        <Typography fontSize='small' sx={{color:'#B3261E', display: (showAlert ? 'block' : 'none')}}>😔  Неверный ответ. Проверьте решение</Typography>
+                        <TextField id="" label="Ответ" variant="outlined"  sx={{width: '100%'}} disabled={!buttonHideSolution}/>
+                        <Typography fontSize='small' sx={{color:'#B3261E', display: (isShowNotSuccessAlert ? 'block' : 'none')}}>{textNotSuccessAnswer}</Typography>
                     </Box>
 
                     <Box sx={solutionStyle}>
-                        <Box variant='span' sx={{display: (isOpenSuccessAlert ? 'block' : 'none')}}>
-                            <Alert icon={false} severity="success" sx={{borderRadius: '12px', }} onClose={() => {setIsOpenSuccessAlert(false)}}>🥳  Правильный ответ</Alert>
+                        <Box variant='span' sx={{display: (isShowSuccessAlert ? 'block' : 'none')}}>
+                            <Alert icon={false} severity="success" sx={{borderRadius: '12px', }}
+                             onClose={() => {setIsShowSuccessAlert(false)}}>🥳  Правильный ответ</Alert>
                         </Box>
                         <Box sx={{my: '16px'}}>
                             <Typography sx={titleMediumStyle}>Решение</Typography>
@@ -163,10 +204,19 @@ function Solution({task, index}) {
                         </Box>
                     </Box>
                     <Box sx={buttonGroupStyle}>
-                        <ButtonOutlined>Показать решение</ButtonOutlined>
-                        <ButtonContained>Проверить ответ</ButtonContained>
-                        {/* <ButtonOutlined>Скрыть решение</ButtonOutlined> */}
+                        {isIsHideAnswer ? 
+                        <>
+                            <ButtonOutlined onClick={showAnswer}>Показать решение</ButtonOutlined>
+                            <ButtonContained onClick={checkAnswer}>Проверить ответ</ButtonContained>
+                        </>
+                        :
+                        <>
+                            <ButtonContained onClick={resetSolve}>Решить заново</ButtonContained>
+                            <ButtonOutlined onClick={hideSolution}>Скрыть решение</ButtonOutlined>
+                        </>
+                        }
                     </Box>
+
                 </Box>
             </Box>
             

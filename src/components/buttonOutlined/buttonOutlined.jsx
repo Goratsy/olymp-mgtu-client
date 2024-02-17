@@ -6,7 +6,7 @@ import React from "react";
 function ButtonOutlined(props) {
     const theme = useTheme();
     const bgColorButton = theme.palette.violet.main;
-    const bgColorHoverButton = theme.palette.violet.light;
+    const bgColorHoverButton = theme.palette.violet.dark_light;
 
     const buttonStyle = {
         borderColor: bgColorButton,

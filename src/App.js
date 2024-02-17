@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Navbar from './components/navbar/Navbar';
 import Banner from './components/banner/Banner';
-import { Box } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import Filters from './components/filters/Filters';
 import Catalog from './components/catalog/Catalog';
 
@@ -109,6 +109,8 @@ function App() {
       }}>
         <Navbar></Navbar>
         <Banner></Banner>
+
+       
         <Box>
           <Filters></Filters>
           <Catalog></Catalog>
