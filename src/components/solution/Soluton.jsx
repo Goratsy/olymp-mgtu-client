@@ -146,7 +146,6 @@ function Solution({task, index, setIndexSolution, length}) {
         setIsShowNotSuccessAlert(true);
     }
 
-
     return(
         <>
             <Box sx={taskStyle}>

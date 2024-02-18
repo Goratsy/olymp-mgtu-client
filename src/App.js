@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Navbar from './components/navbar/Navbar';
 import Banner from './components/banner/Banner';
@@ -11,6 +11,8 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './App.css'
+
+const ArrayContext = createContext();
 
 const theme = createTheme({
   palette: {
@@ -101,24 +103,27 @@ const theme = createTheme({
 });
 
 function App() {
+  let [contextArrayTasks, setContextArrayTasks] = useState([]);
+
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{
-        pt: "12px",
-        pb: '12px'
-      }}>
-        <Navbar></Navbar>
-        <Banner></Banner>
-
-       
-        <Box>
-          <Filters></Filters>
-          <Catalog></Catalog>
+      <ArrayContext.Provider value={{contextArrayTasks, setContextArrayTasks}}>
+        <Box sx={{
+          pt: "12px",
+          pb: '12px'
+        }}>
+          <Navbar></Navbar>
+          <Banner></Banner>
+          <Box>
+            <Filters></Filters>
+            <Catalog></Catalog>
+          </Box>
         </Box>
-      </Box>
+      </ArrayContext.Provider>
     </ThemeProvider>
       
   );
 }
 
 export default App;
+export const useArrayContext = () => useContext(ArrayContext);
