@@ -5,11 +5,11 @@ import CheckIcon from '@mui/icons-material/Check';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import RemoveIcon from '@mui/icons-material/Remove';
 
-function TaskCard({task, index}) {
+function TaskCard({task, index, current, onClickTask}) {
     const theme = useTheme();
 
     let cardStyle = {
-        backgroundColor: theme.palette.violet.light,
+        backgroundColor: (current ? theme.palette.violet.light_dark : theme.palette.violet.light),
         display: "flex",
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -33,11 +33,11 @@ function TaskCard({task, index}) {
     };
 
     return(
-    <Box sx={cardStyle}>
+    <Box sx={cardStyle} onClick={onClickTask}>
             <Box>
-                <CheckIcon sx={{fontSize: '24px', display: 'block'}}></CheckIcon>
-                {/* <CheckIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.violet.main}}></CheckIcon>
-                <RemoveIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.grey.main}}></RemoveIcon> */}
+                {/* <CheckIcon sx={{fontSize: '24px', display: 'block'}}></CheckIcon> */}
+                {/* <CheckIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.violet.main}}></CheckIcon> */}
+                <RemoveIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.grey.main}}></RemoveIcon>
             </Box>
             <Box>
                 <Typography  sx={labelMainStyle}>{task.difficult} • {task.year}</Typography>

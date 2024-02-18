@@ -10,7 +10,7 @@ import answerImageAnswerTest from '../../assets/tasks/answerImage/answer1.png';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-function Solution({task, index}) {
+function Solution({task, index, setIndexSolution, length}) {
     const theme = useTheme();
     const bgCard = theme.palette.violet.light;
 
@@ -223,7 +223,7 @@ function Solution({task, index}) {
             <Box>
                 <Box sx={{display: 'flex', flexDirection: 'row',  gap: '12px'}}>
                     {index === 1 ? '' :
-                    (<Box sx={linkToTask}>
+                    (<Box sx={linkToTask} onClick={() => setIndexSolution(index-2)}>
                         <Box sx={cardLinkToNextTaskStyle}>
                             <SkipPreviousOutlinedIcon sx={{fontSize:'24px',}}></SkipPreviousOutlinedIcon>
                             <Typography sx={titleMediumVioletStyle}>Предыдущая</Typography>
@@ -231,14 +231,17 @@ function Solution({task, index}) {
                         <Typography sx={subtitle1Style}>Задача {index - 1}</Typography>
                     </Box>)
                     }
-                    <Box sx={linkToTask}>    
+
+                    {index === length ? '' :
+                    (<Box sx={linkToTask} onClick={() => setIndexSolution(index)}>    
                         <Box sx={cardLinkToNextTaskStyle}>
                             <Typography sx={titleMediumVioletStyle}>Следующая</Typography>
                             <SkipNextOutlinedIcon sx={{fontSize:'24px'}}></SkipNextOutlinedIcon>
                         </Box>
                         <Typography sx={subtitle1Style}>Задача {index + 1}</Typography>
-                    </Box>
-                    {/* Доработать ссылки */}
+                    </Box>)
+                    }
+                    
                 </Box>
             </Box>
         </>
