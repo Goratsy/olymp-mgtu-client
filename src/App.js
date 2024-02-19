@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Navbar from './components/navbar/Navbar';
 import Banner from './components/banner/Banner';
-import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import Filters from './components/filters/Filters';
 import Catalog from './components/catalog/Catalog';
 
@@ -105,6 +105,7 @@ const theme = createTheme({
 function App() {
   let [contextArrayTasks, setContextArrayTasks] = useState([]);
 
+  
   return (
     <ThemeProvider theme={theme}>
       <ArrayContext.Provider value={{contextArrayTasks, setContextArrayTasks}}>
