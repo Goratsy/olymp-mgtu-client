@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Box, ToggleButtonGroup, ToggleButton, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-
 import { useArrayContext } from '../../App.js';
 
 function Filters() {
@@ -29,6 +28,10 @@ function Filters() {
 
     useEffect(() => {
         console.log(dataForm);
+        fetch(`/taskByFilter/?difficult=${dataForm.difficult}&subject=${dataForm.subject}&year=${dataForm.year}`)
+            .then(data => data.json())
+            .then(data => {setContextArrayTasks(data);})
+            .catch(err => {console.log(err);});
       }, [dataForm]);
     
     return (
@@ -44,12 +47,12 @@ function Filters() {
                     value={dataForm.difficult}
                     name='difficult'
                 >
-                    <MenuItem value='none'>
+                    <MenuItem value=''>
                         <em>Выбрать</em>
                     </MenuItem>
-                    <MenuItem value='easy'>Легкая</MenuItem>
-                    <MenuItem value='normal'>Средняя</MenuItem>
-                    <MenuItem value='hard'>Тяжелая</MenuItem>
+                    <MenuItem value='Легкая'>Легкая</MenuItem>
+                    <MenuItem value='Средняя'>Средняя</MenuItem>
+                    <MenuItem value='Тяжелая'>Тяжелая</MenuItem>
                 </Select>
             </FormControl>
 
