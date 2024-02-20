@@ -22,7 +22,7 @@ const theme = createTheme({
     },
 
     secondary: {
-      main: '#ffffff',
+      main: '#8573b6',
       white: '#ffffff',
       black: '#000000',
       grey_surface: '#49454F'
