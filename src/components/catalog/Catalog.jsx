@@ -2,8 +2,7 @@ import { Box, Grid, Typography} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import TaskCard from "../taskCard/TaskCard";
 import Solution from "../solution/Soluton";
-import { useArrayContext } from '../../App.js';
-import Loading from '../../assets/loading1.svg';
+import { useInfoSolutionContext, useArrayContext } from '../../App.js';
 import { useTheme } from "@emotion/react";
 
 function Catalog() {
@@ -12,13 +11,14 @@ function Catalog() {
 
     const [indexSolution, setIndexSolution] = useState(0);
     const {contextArrayTasks, setContextArrayTasks} = useArrayContext();
+    let {setAnswerValue, setIsHideAnswer} = useInfoSolutionContext();
     
     useEffect(() => {
         fetch('/allTasks')
             .then((data) => data.json())
             .then((res) => setContextArrayTasks(res))
             .catch(err => {console.log(err);});
-        console.log(contextArrayTasks); 
+        
     }, []);
 
     const catalogStyle = {
@@ -49,7 +49,12 @@ function Catalog() {
                          <Typography>🤔 Нет таких задач! Упростите фильтры.</Typography>
                     </>
                     : contextArrayTasks.map((data, index) => {
-                        return (<TaskCard task={data} index={index+1} current={(indexSolution === index)} key={data._id} onClickTask={() => {setIndexSolution(index)}}></TaskCard>)
+                        return (<TaskCard task={data} index={index+1} current={(indexSolution === index)} key={data._id} 
+                        onClickTask={() => {
+                            setIndexSolution(index);
+                            setAnswerValue('');
+                            setIsHideAnswer(true);
+                        }}></TaskCard>)
                     })}
                 </Box>
             </Grid>

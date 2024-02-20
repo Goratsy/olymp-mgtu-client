@@ -27,7 +27,6 @@ function Filters() {
     }
 
     useEffect(() => {
-        console.log(dataForm);
         fetch(`/taskByFilter/?difficult=${dataForm.difficult}&subject=${dataForm.subject}&year=${dataForm.year}`)
             .then(data => data.json())
             .then(data => {setContextArrayTasks(data);})
@@ -48,7 +47,7 @@ function Filters() {
                     name='difficult'
                 >
                     <MenuItem value=''>
-                        <em>Выбрать</em>
+                        <em>Все</em>
                     </MenuItem>
                     <MenuItem value='Легкая'>Легкая</MenuItem>
                     <MenuItem value='Средняя'>Средняя</MenuItem>
@@ -82,7 +81,7 @@ function Filters() {
                     name='year'
                 >
                     <MenuItem value=''>
-                        <em>Выбрать</em>
+                        <em>Все</em>
                     </MenuItem>
                     <MenuItem value='2023'>2023</MenuItem>
                     <MenuItem value='2022'>2022</MenuItem>

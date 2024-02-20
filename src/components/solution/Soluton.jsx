@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box,Typography, TextField, IconButton } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
@@ -6,15 +6,16 @@ import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
 import ButtonOutlined from "../buttonOutlined/buttonOutlined";
 import ButtonContained from "../buttonContained/buttonContained";
 import Alert from '@mui/material/Alert';
-import answerImageAnswerTest from '../../assets/tasks/answerImage/answer1.png';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { useInfoSolutionContext } from "../../App";
 
 function Solution({task, index, setIndexSolution, length}) {
     const theme = useTheme();
     const bgCard = theme.palette.violet.light;
 
-    let [isIsHideAnswer, setIsHideAnswer] = useState(true);
+    let {answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer} = useInfoSolutionContext();
+
 
     const taskStyle = {
         display: 'flex',
@@ -90,7 +91,7 @@ function Solution({task, index, setIndexSolution, length}) {
     }
     
     let groupTextFieldStyle = {
-        display: (isIsHideAnswer ? 'block' : 'none'),
+        display: (isHideAnswer ? 'block' : 'none'),
         width: '100%', 
         mt: '12px',  
     }
@@ -98,7 +99,7 @@ function Solution({task, index, setIndexSolution, length}) {
     let solutionStyle = {
         mt: '12px',  
         width: '100%', 
-        display: (isIsHideAnswer ? 'none' : 'block')
+        display: (isHideAnswer ? 'none' : 'block')
     }
 
     let [isOpenWindowSolution, setIsOpenWindowSolution] = useState(true);
@@ -106,7 +107,6 @@ function Solution({task, index, setIndexSolution, length}) {
     let [isShowNotSuccessAlert, setIsShowNotSuccessAlert] = useState(false);
     let [textNotSuccessAnswer, setTextNotSuccessAnswer] = useState('');
     let [buttonHideSolution, setButtonHideSolution] = useState(true);
-    let [answerValue, setAnswerValue] = useState('');
 
     let toggleWindowSolution = () => {setIsOpenWindowSolution(!isOpenWindowSolution)};
 
@@ -117,8 +117,6 @@ function Solution({task, index, setIndexSolution, length}) {
 
     let checkAnswer = async () => {
         let isCorrectAnswer = null
-        // сделать валидацию
-        // проверить решал ли user задачу
         try {
             if (answerValue.length === 0) {
                 throw new Error('Заполните поле ввода!');
@@ -131,18 +129,17 @@ function Solution({task, index, setIndexSolution, length}) {
                 .then(data => data.json())
                 .then(data => {isCorrectAnswer = data.isCorrectAnswer});
 
-            console.log(isCorrectAnswer);
         } catch (error) {
             setTextNotSuccessAnswer(`Произошла ошибка: ${error}`)
-        }
+    }
 
         if (isCorrectAnswer === true) {
             setIsHideAnswer(false);
+            localStorage.setItem(`${task._id}Stage`, 'done');
         } else if (isCorrectAnswer === false) {
             setTextNotSuccessAnswer('😔  Неверный ответ. Проверьте решение');
             setIsShowNotSuccessAlert(true);
         }
-        // сохранить прогресс user
     }
 
     let resetSolve = () => {
@@ -157,6 +154,15 @@ function Solution({task, index, setIndexSolution, length}) {
         setTextNotSuccessAnswer('Чтобы начать заново нажмите на  «Показать решение» -> «Решить заново»');
         setIsShowNotSuccessAlert(true);
     }
+
+    useEffect(() => {
+        if (localStorage.getItem(`${task._id}`) !== null) {
+            setAnswerValue(localStorage.getItem(`${task._id}`));
+        } else {
+            setAnswerValue('');
+        }
+
+    })
 
     return(
         <>
@@ -182,7 +188,14 @@ function Solution({task, index, setIndexSolution, length}) {
                     <Typography sx={descriptionStyle}>{task.description}</Typography>
 
                     <Box sx={groupTextFieldStyle}>
-                        <TextField id="answerInput" label="Ответ" variant="outlined"  sx={{width: '100%'}} disabled={!buttonHideSolution} value={answerValue} onChange={(e) => {setAnswerValue(e.target.value)}}/>
+                        <TextField id="answerInput" label="Ответ" variant="outlined"  sx={{width: '100%'}} disabled={!buttonHideSolution} 
+                            value={answerValue}
+                            onChange={(e) => {
+                                setAnswerValue(e.target.value);
+                                localStorage.setItem(`${task._id}`, `${e.target.value}`);
+                            }}
+                            
+                        />
                         <Typography fontSize='small' sx={{color:'#B3261E', display: (isShowNotSuccessAlert ? 'block' : 'none')}}>{textNotSuccessAnswer}</Typography>
                     </Box>
 
@@ -216,7 +229,7 @@ function Solution({task, index, setIndexSolution, length}) {
                     </Box>
 
                     <Box sx={buttonGroupStyle}>
-                        {isIsHideAnswer ? 
+                        {isHideAnswer ? 
                         <>
                             <ButtonOutlined onClick={showAnswer}>Показать решение</ButtonOutlined>
                             <ButtonContained onClick={checkAnswer}>Проверить ответ</ButtonContained>
@@ -238,6 +251,7 @@ function Solution({task, index, setIndexSolution, length}) {
                     (<Box sx={linkToTask} onClick={() => {
                         setIndexSolution(index-2);
                         setAnswerValue('');
+                        setIsHideAnswer(true);
                         }}>
                         <Box sx={cardLinkToNextTaskStyle}>
                             <SkipPreviousOutlinedIcon sx={{fontSize:'24px',}}></SkipPreviousOutlinedIcon>
@@ -251,6 +265,7 @@ function Solution({task, index, setIndexSolution, length}) {
                     (<Box sx={linkToTask} onClick={() => {
                         setIndexSolution(index);
                         setAnswerValue('');
+                        setIsHideAnswer(true);
                         }}>    
                         <Box sx={cardLinkToNextTaskStyle}>
                             <Typography sx={titleMediumVioletStyle}>Следующая</Typography>

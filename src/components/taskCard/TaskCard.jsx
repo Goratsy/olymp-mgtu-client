@@ -32,12 +32,15 @@ function TaskCard({task, index, current, onClickTask}) {
         textOverflow: 'ellipsis'
     };
 
+    if (localStorage.getItem(`${task._id}Stage`) !== null) {
+        task.executionStage = localStorage.getItem(`${task._id}Stage`)
+    }
+
     return(
     <Box sx={cardStyle} onClick={onClickTask}>
             <Box>
-                {/* <CheckIcon sx={{fontSize: '24px', display: 'block'}}></CheckIcon> */}
-                {/* <CheckIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.violet.main}}></CheckIcon> */}
-                <RemoveIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.grey.main}}></RemoveIcon>
+                {task.executionStage === 'notdone' ? <RemoveIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.grey.main}}></RemoveIcon> : ''}
+                {task.executionStage === 'done' ? <CheckIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.violet.main}}></CheckIcon> : ''}
             </Box>
             <Box>
                 <Typography  sx={labelMainStyle}>{task.difficult} • {task.year}</Typography>

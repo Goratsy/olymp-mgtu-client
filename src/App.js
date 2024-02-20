@@ -13,6 +13,7 @@ import '@fontsource/roboto/700.css';
 import './App.css'
 
 const ArrayContext = createContext();
+const InfoSolutionContext = createContext();
 
 const theme = createTheme({
   palette: {
@@ -100,21 +101,25 @@ const theme = createTheme({
 
 function App() {
   let [contextArrayTasks, setContextArrayTasks] = useState([]);
+  let [answerValue, setAnswerValue] = useState('');
+  let [isHideAnswer, setIsHideAnswer] = useState(true);
 
   return (
     <ThemeProvider theme={theme}>
       <ArrayContext.Provider value={{contextArrayTasks, setContextArrayTasks}}>
-        <Box sx={{
-          pt: "12px",
-          pb: '12px'
-        }}>
-          <Navbar></Navbar>
-          <Banner></Banner>
-          <Box>
-            <Filters></Filters>
-            <Catalog></Catalog>
+        <InfoSolutionContext.Provider value={{answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer}}>
+          <Box sx={{
+            pt: "12px",
+            pb: '12px'
+          }}>
+            <Navbar></Navbar>
+            <Banner></Banner>
+            <Box>
+              <Filters></Filters>
+              <Catalog></Catalog>
+            </Box>
           </Box>
-        </Box>
+        </InfoSolutionContext.Provider>
       </ArrayContext.Provider>
     </ThemeProvider>
       
@@ -123,3 +128,4 @@ function App() {
 
 export default App;
 export const useArrayContext = () => useContext(ArrayContext);
+export const useInfoSolutionContext = () => useContext(InfoSolutionContext);
