@@ -36,12 +36,12 @@ function Filters() {
     
     return (
         <Box sx={filterStyle}>
-            <FormControl sx={{minWidth: 140}} size="small" >
+            <FormControl sx={{minWidth: 140}} size="small">
                 <InputLabel id="difficult-label" >Сложность</InputLabel>
                 <Select
-                    labelId="difficult-select-label"
+                    labelId="difficult-label"
                     id="difficult-select"
-                    label="difficult"
+                    label="Сложность"
                     sx={{borderRadius: '12px'}}
                     onChange={controlForms}
                     value={dataForm.difficult}
@@ -71,11 +71,11 @@ function Filters() {
             </ToggleButtonGroup>
             
             <FormControl sx={{ minWidth: 140 }} size="small">
-                <InputLabel id="year-select-label">Год</InputLabel>
+                <InputLabel id="year-label">Год</InputLabel>
                 <Select
-                    labelId="year-select-label"
+                    labelId="year-label"
                     id="year-select"
-                    label="year"
+                    label="Год"
                     sx={{borderRadius: '12px'}}
                     value={dataForm.year}
                     onChange={controlForms}

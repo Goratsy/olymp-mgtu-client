@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Navbar from './components/navbar/Navbar';
 import Banner from './components/banner/Banner';
-import { Box, FormControl, InputLabel, MenuItem, Select, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Box } from '@mui/material';
 import Filters from './components/filters/Filters';
 import Catalog from './components/catalog/Catalog';
 
@@ -17,15 +17,11 @@ const ArrayContext = createContext();
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#ffffff',
-      violet_dark: '#483872',
-      violet_main: '#6750A4',
-      violet_light: '#8573b6',
-      violet_bgCard: '#FEF7FF',
-      violet_subtitle1: '#B0A7C0',
+      main: '#000',
     },
+
     secondary: {
-      main: '#fffff',
+      main: '#ffffff',
       white: '#ffffff',
       black: '#000000',
       grey_surface: '#49454F'
@@ -105,7 +101,6 @@ const theme = createTheme({
 function App() {
   let [contextArrayTasks, setContextArrayTasks] = useState([]);
 
-  
   return (
     <ThemeProvider theme={theme}>
       <ArrayContext.Provider value={{contextArrayTasks, setContextArrayTasks}}>

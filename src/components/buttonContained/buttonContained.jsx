@@ -12,7 +12,7 @@ function ButtonContained(props) {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: bgColorButton,
-        color: 'white',
+        color: theme.palette.white.main,
         py: '10px',
         px: '24px',
         borderRadius: '100px',
