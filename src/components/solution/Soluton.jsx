@@ -106,6 +106,7 @@ function Solution({task, index, setIndexSolution, length}) {
     let [isShowNotSuccessAlert, setIsShowNotSuccessAlert] = useState(false);
     let [textNotSuccessAnswer, setTextNotSuccessAnswer] = useState('');
     let [buttonHideSolution, setButtonHideSolution] = useState(true);
+    let [answerValue, setAnswerValue] = useState('');
 
     let toggleWindowSolution = () => {setIsOpenWindowSolution(!isOpenWindowSolution)};
 
@@ -114,19 +115,30 @@ function Solution({task, index, setIndexSolution, length}) {
         setIsShowSuccessAlert(false);
     }
 
-    let checkAnswer = () => {
+    let checkAnswer = async () => {
         let isCorrectAnswer = null
         // сделать валидацию
         // проверить решал ли user задачу
         try {
-            isCorrectAnswer = true // fetch
+            if (answerValue.length === 0) {
+                throw new Error('Заполните поле ввода!');
+            }
+            if (isNaN(Number(answerValue))) {
+                throw new Error('Вводимые в поле данные должны быть числами!');
+            }
+
+            await fetch(`/checkAnswer/?id=${task._id}&answer=${answerValue}`)
+                .then(data => data.json())
+                .then(data => {isCorrectAnswer = data.isCorrectAnswer});
+
+            console.log(isCorrectAnswer);
         } catch (error) {
-            textNotSuccessAnswer = `Произошла ошибка ${error}`
+            setTextNotSuccessAnswer(`Произошла ошибка: ${error}`)
         }
 
-        if (isCorrectAnswer) {
+        if (isCorrectAnswer === true) {
             setIsHideAnswer(false);
-        } else if (!isCorrectAnswer) {
+        } else if (isCorrectAnswer === false) {
             setTextNotSuccessAnswer('😔  Неверный ответ. Проверьте решение');
             setIsShowNotSuccessAlert(true);
         }
@@ -161,16 +173,16 @@ function Solution({task, index, setIndexSolution, length}) {
                 </Box>
                 <Box variant='span' style={{display: (isOpenWindowSolution ? 'block' : 'none')}}>
                     <Box sx={{display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap'}}>
-                        {task.imageTasks.map((a, b) => {
+                        {task.imageTasks.map((src, index) => {
                             return (
-                                <img src={a} alt={`Изображение ${b+1}`} style={{width: '100%'}} key={`image ${b}`}/>                         
-                            )
+                                <img src={src} alt={`Изображение ${index+1}`} style={{width: '100%'}} key={`image ${index}`}/>                         
+                            );
                         })}
                     </Box>
                     <Typography sx={descriptionStyle}>{task.description}</Typography>
 
                     <Box sx={groupTextFieldStyle}>
-                        <TextField id="" label="Ответ" variant="outlined"  sx={{width: '100%'}} disabled={!buttonHideSolution}/>
+                        <TextField id="answerInput" label="Ответ" variant="outlined"  sx={{width: '100%'}} disabled={!buttonHideSolution} value={answerValue} onChange={(e) => {setAnswerValue(e.target.value)}}/>
                         <Typography fontSize='small' sx={{color:'#B3261E', display: (isShowNotSuccessAlert ? 'block' : 'none')}}>{textNotSuccessAnswer}</Typography>
                     </Box>
 
@@ -202,6 +214,7 @@ function Solution({task, index, setIndexSolution, length}) {
                             })}
                         </Box>
                     </Box>
+
                     <Box sx={buttonGroupStyle}>
                         {isIsHideAnswer ? 
                         <>
@@ -222,7 +235,10 @@ function Solution({task, index, setIndexSolution, length}) {
             <Box>
                 <Box sx={{display: 'flex', flexDirection: 'row',  gap: '12px'}}>
                     {index === 1 ? '' :
-                    (<Box sx={linkToTask} onClick={() => setIndexSolution(index-2)}>
+                    (<Box sx={linkToTask} onClick={() => {
+                        setIndexSolution(index-2);
+                        setAnswerValue('');
+                        }}>
                         <Box sx={cardLinkToNextTaskStyle}>
                             <SkipPreviousOutlinedIcon sx={{fontSize:'24px',}}></SkipPreviousOutlinedIcon>
                             <Typography sx={titleMediumVioletStyle}>Предыдущая</Typography>
@@ -232,7 +248,10 @@ function Solution({task, index, setIndexSolution, length}) {
                     }
 
                     {index === length ? '' :
-                    (<Box sx={linkToTask} onClick={() => setIndexSolution(index)}>    
+                    (<Box sx={linkToTask} onClick={() => {
+                        setIndexSolution(index);
+                        setAnswerValue('');
+                        }}>    
                         <Box sx={cardLinkToNextTaskStyle}>
                             <Typography sx={titleMediumVioletStyle}>Следующая</Typography>
                             <SkipNextOutlinedIcon sx={{fontSize:'24px'}}></SkipNextOutlinedIcon>
