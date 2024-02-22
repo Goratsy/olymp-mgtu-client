@@ -10,20 +10,24 @@ function Catalog() {
     const bgCard = theme.palette.violet.light;
 
     const [indexSolution, setIndexSolution] = useState(0);
-    const {contextArrayTasks, setContextArrayTasks} = useArrayContext();
+    const {contextArrayTasks, numberOfPage, setPage} = useArrayContext();
+
     let {setAnswerValue, setIsHideAnswer} = useInfoSolutionContext();
-    
-    useEffect(() => {
-        fetch('/allTasks')
-            .then((data) => data.json())
-            .then((res) => setContextArrayTasks(res))
-            .catch(err => {console.log(err);});
-        
-    }, []);
+
+
+    // useEffect(() => {
+    //     fetch(`/allTasks/`)
+    //         .then((data) => data.json())
+    //         .then((res) => {setContextArrayTasks(data)})
+    //         .catch(err => {console.log(err);});
+    // }, []);
+
+    let changePage = (event, value) => {setPage(value);}
 
     const catalogStyle = {
         display: 'flex',
         justifyContent: 'center',
+        alignItems: 'center',
         flexDirection: 'column',
         borderRadius: '12px',
         overflow: 'hidden',
@@ -53,7 +57,14 @@ function Catalog() {
                         }}></TaskCard>)
                     })}
                 </Box>
-                <Pagination count={5} variant="outlined" color="secondary" sx={{mt: '20px'}}/>
+                {contextArrayTasks.length === 0 
+                    ? ''
+                    : 
+                    <Box sx={{display: 'flex', justifyContent: 'center', mt: '30px'}}>
+                        <Pagination count={numberOfPage} variant="outlined" color="secondary" onChange={changePage}/>
+                    </Box>
+                    }
+                
             </Grid>
             <Grid item xs={2}>
                 {contextArrayTasks.length === 0 ? 

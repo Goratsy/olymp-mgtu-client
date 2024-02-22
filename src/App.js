@@ -101,12 +101,15 @@ const theme = createTheme({
 
 function App() {
   let [contextArrayTasks, setContextArrayTasks] = useState([]);
+  let [numberOfPage, setNumberOfPage] = useState(0);
+  let [page, setPage] = useState(1);
+
   let [answerValue, setAnswerValue] = useState('');
   let [isHideAnswer, setIsHideAnswer] = useState(true);
 
   return (
     <ThemeProvider theme={theme}>
-      <ArrayContext.Provider value={{contextArrayTasks, setContextArrayTasks}}>
+      <ArrayContext.Provider value={{contextArrayTasks, setContextArrayTasks, numberOfPage, setNumberOfPage, page, setPage}}>
         <InfoSolutionContext.Provider value={{answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer}}>
           <Box sx={{
             pt: "12px",

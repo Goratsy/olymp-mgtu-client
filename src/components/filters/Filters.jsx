@@ -3,7 +3,7 @@ import { Box, ToggleButtonGroup, ToggleButton, FormControl, InputLabel, Select, 
 import { useArrayContext } from '../../App.js';
 
 function Filters() {
-    let {contextArrayTasks, setContextArrayTasks} = useArrayContext();
+    let {setContextArrayTasks, setNumberOfPage, page} = useArrayContext();
 
     const filterStyle = {
         display: 'flex',
@@ -27,11 +27,13 @@ function Filters() {
     }
 
     useEffect(() => {
-        fetch(`/taskByFilter/?difficult=${dataForm.difficult}&subject=${dataForm.subject}&year=${dataForm.year}`)
+        fetch(`/taskByFilter/?difficult=${dataForm.difficult}&subject=${dataForm.subject}&year=${dataForm.year}&page=${page}`)
             .then(data => data.json())
-            .then(data => {setContextArrayTasks(data);})
-            .catch(err => {console.log(err);});
-      }, [dataForm]);
+            .then(res => {setContextArrayTasks(res.tasks); setNumberOfPage(res.numberOfpage); console.log(res)})
+            .catch(err => {console.log(err);});        
+      }, [dataForm, page]);
+
+
     
     return (
         <Box sx={filterStyle}>

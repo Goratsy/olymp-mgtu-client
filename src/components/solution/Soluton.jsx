@@ -194,7 +194,7 @@ function Solution({task, index, setIndexSolution, length}) {
                                 setAnswerValue(e.target.value);
                                 localStorage.setItem(`${task._id}`, `${e.target.value}`);
                             }}
-                            
+                            type="number"
                         />
                         <Typography fontSize='small' sx={{color:'#B3261E', display: (isShowNotSuccessAlert ? 'block' : 'none')}}>{textNotSuccessAnswer}</Typography>
                     </Box>

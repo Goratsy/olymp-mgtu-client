@@ -37,15 +37,14 @@ function TaskCard({task, index, current, onClickTask}) {
     }
 
     return(
-    <Box sx={cardStyle} onClick={onClickTask}>
+        <Box sx={cardStyle} onClick={onClickTask}>
             <Box>
-                {task.executionStage === 'notdone' ? <RemoveIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.grey.main}}></RemoveIcon> : ''}
+                {task.executionStage === '' ? <RemoveIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.grey.main}}></RemoveIcon> : ''}
                 {task.executionStage === 'done' ? <CheckIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.violet.main}}></CheckIcon> : ''}
             </Box>
             <Box>
                 <Typography  sx={labelMainStyle}>{task.difficult} • {task.year}</Typography>
-
-                <Typography sx={bodyLargeStyle}>Задача {index}</Typography>
+                <Typography sx={bodyLargeStyle}>Задача {task._id.slice(0, 5)}</Typography>
                 <Typography sx={descriptionStyle}>{task.description.slice(0, 130)+'...'}</Typography>    
             </Box>
             <Box>
