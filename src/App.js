@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Navbar from './components/navbar/Navbar';
 import Banner from './components/banner/Banner';
-import { Box } from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
 import Filters from './components/filters/Filters';
 import Catalog from './components/catalog/Catalog';
 
@@ -107,16 +107,45 @@ function App() {
   let [answerValue, setAnswerValue] = useState('');
   let [isHideAnswer, setIsHideAnswer] = useState(true);
 
+  function uploadFile() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/upload', {
+        method: 'POST',
+        body: formData
+    })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error(`Ошибка! Код http-ответа: ${response.status}`);
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log('Файл успешно загружен:', data);
+      })
+      .catch(error => {
+          console.error('Ошибка:', error);
+      });
+    }
+
+
   return (
     <ThemeProvider theme={theme}>
       <ArrayContext.Provider value={{contextArrayTasks, setContextArrayTasks, numberOfPage, setNumberOfPage, page, setPage}}>
         <InfoSolutionContext.Provider value={{answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer}}>
-          <Box sx={{
-            pt: "12px",
-            pb: '12px'
-          }}>
-            <Navbar></Navbar>
-            <Banner></Banner>
+            <Box sx={{
+              pt: "12px",
+              pb: '12px'
+            }}>
+              <Navbar></Navbar>
+              <Banner></Banner>
+              
+              <TextField type="file" id="fileInput"></TextField>
+              <Button variant='succes' onClick={uploadFile} accept=".py">Отправить файлы</Button>
             <Box>
               <Filters></Filters>
               <Catalog></Catalog>
