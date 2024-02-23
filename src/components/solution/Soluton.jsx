@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box,Typography, TextField, IconButton } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
@@ -14,7 +14,7 @@ function Solution({task, index, setIndexSolution, length}) {
     const theme = useTheme();
     const bgCard = theme.palette.violet.light;
 
-    let {answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer} = useInfoSolutionContext();
+    let {answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer, textNotSuccessAnswer, setTextNotSuccessAnswer} = useInfoSolutionContext();
 
 
     const taskStyle = {
@@ -105,8 +105,8 @@ function Solution({task, index, setIndexSolution, length}) {
     let [isOpenWindowSolution, setIsOpenWindowSolution] = useState(true);
     let [isShowSuccessAlert, setIsShowSuccessAlert] = useState(true);
     let [isShowNotSuccessAlert, setIsShowNotSuccessAlert] = useState(false);
-    let [textNotSuccessAnswer, setTextNotSuccessAnswer] = useState('');
     let [buttonHideSolution, setButtonHideSolution] = useState(true);
+    let [answerFromGPT, setAnswerFromGPT] = useState('');
 
     let toggleWindowSolution = () => {setIsOpenWindowSolution(!isOpenWindowSolution)};
 
@@ -116,7 +116,7 @@ function Solution({task, index, setIndexSolution, length}) {
     }
 
     let checkAnswer = async () => {
-        let isCorrectAnswer = null
+        let isCorrectAnswer = null;
         try {
             if (answerValue.length === 0) {
                 throw new Error('Заполните поле ввода!');
@@ -130,11 +130,13 @@ function Solution({task, index, setIndexSolution, length}) {
                 .then(data => {isCorrectAnswer = data.isCorrectAnswer});
 
         } catch (error) {
-            setTextNotSuccessAnswer(`Произошла ошибка: ${error}`)
+            setIsShowNotSuccessAlert(true);
+            setTextNotSuccessAnswer(`Произошла ошибка: ${error.message}`);
     }
 
         if (isCorrectAnswer === true) {
             setIsHideAnswer(false);
+            setIsShowSuccessAlert(true)
             localStorage.setItem(`${task._id}Stage`, 'done');
         } else if (isCorrectAnswer === false) {
             setTextNotSuccessAnswer('😔  Неверный ответ. Проверьте решение');
@@ -145,15 +147,15 @@ function Solution({task, index, setIndexSolution, length}) {
     let resetSolve = () => {
         setIsHideAnswer(true);
         setTextNotSuccessAnswer('');
-        setButtonHideSolution(true)
+        setButtonHideSolution(true);
     }
 
-    let hideSolution = () => {
-        setIsHideAnswer(true);
-        setButtonHideSolution(false);
-        setTextNotSuccessAnswer('Чтобы начать заново нажмите на  «Показать решение» -> «Решить заново»');
-        setIsShowNotSuccessAlert(true);
-    }
+    // let hideSolution = () => {
+    //     setIsHideAnswer(true);
+    //     setButtonHideSolution(false);
+    //     setTextNotSuccessAnswer('Чтобы начать заново нажмите на  «Показать решение» -> «Решить заново»');
+    //     setIsShowNotSuccessAlert(true);
+    // }
 
     useEffect(() => {
         if (localStorage.getItem(`${task._id}`) !== null) {
@@ -161,8 +163,34 @@ function Solution({task, index, setIndexSolution, length}) {
         } else {
             setAnswerValue('');
         }
-
+        // setAnswerFromGPT('');
     })
+
+    function uploadFile() {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+    
+        const formData = new FormData();
+        formData.append('file', file);
+    
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        })
+          .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Ошибка! Код http-ответа: ${response.status}`);
+                }
+                return response.json();
+          })
+          .then(data => {
+                console.log(data);
+                setAnswerFromGPT(data.answerFromGPT);
+          })
+          .catch(error => {
+              console.error('Ошибка:', error);
+          });
+        }
 
     return(
         <>
@@ -236,12 +264,30 @@ function Solution({task, index, setIndexSolution, length}) {
                         </>
                         :
                         <>
-                            <ButtonContained onClick={resetSolve}>Решить заново</ButtonContained>
-                            <ButtonOutlined onClick={hideSolution}>Скрыть решение</ButtonOutlined>
+                            <ButtonOutlined onClick={resetSolve}>Скрыть решение</ButtonOutlined>
                         </>
                         }
                     </Box>
 
+                    {isHideAnswer ? '' :
+                    <>
+                        <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', my: '20px'}}>
+                            <TextField type="file" id="fileInput" accept=".py"></TextField>
+                            <ButtonContained onClick={uploadFile}>Gpt Помоги!</ButtonContained>
+                        </Box>
+                        
+                        {answerFromGPT ? 
+                        <>
+                            <Typography sx={titleMediumStyle}>Ответ от GPT:</Typography>
+                            <Typography sx={bodyLargeStyle}>
+                                {answerFromGPT}
+                            </Typography>
+                        </>
+                        : ''
+                        }
+                    </>
+                    }
+                    
                 </Box>
             </Box>
             

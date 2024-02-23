@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Box, ToggleButtonGroup, ToggleButton, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-import { useArrayContext } from '../../App.js';
+import { useArrayContext, useInfoSolutionContext } from '../../App.js';
 
 function Filters() {
     let {setContextArrayTasks, setNumberOfPage, page} = useArrayContext();
+    let {setIsHideAnswer, setTextNotSuccessAnswer} = useInfoSolutionContext();
 
     const filterStyle = {
         display: 'flex',
@@ -14,22 +15,28 @@ function Filters() {
         my: '30px'
     };
 
-    let [dataForm, setDataForm] = useState({difficult: '', subject: '', year: ''});
+    let [dataForm, setDataForm] = useState({difficult: '', subject: 'math', year: ''});
 
     let controlForms = (e) => {
-        if (e.target.name == 'difficult') {
+        if (e.target.name === 'difficult') {
             setDataForm({difficult: e.target.value, subject: dataForm.subject, year: dataForm.year});
-        } else if (e.target.name == 'subject') {
+        } else if (e.target.name === 'subject') {
             setDataForm({difficult: dataForm.difficult, subject: e.target.value, year: dataForm.year});
-        } else if (e.target.name == 'year') {
+        } else if (e.target.name === 'year') {
             setDataForm({difficult: dataForm.difficult, subject: dataForm.subject, year: e.target.value});
         }
     }
 
     useEffect(() => {
+        setIsHideAnswer(true);
+        setTextNotSuccessAnswer('')
+
         fetch(`/taskByFilter/?difficult=${dataForm.difficult}&subject=${dataForm.subject}&year=${dataForm.year}&page=${page}`)
             .then(data => data.json())
-            .then(res => {setContextArrayTasks(res.tasks); setNumberOfPage(res.numberOfpage); console.log(res)})
+            .then(res => {
+                setContextArrayTasks(res.tasks); 
+                setNumberOfPage(res.numberOfpage);
+            })
             .catch(err => {console.log(err);});        
       }, [dataForm, page]);
 
@@ -65,7 +72,7 @@ function Filters() {
                 value={dataForm.subject}
                 onChange={controlForms}
             >
-                <ToggleButton value="" sx={{textTransform: 'capitalize', color: 'black'}} name='subject'>Все</ToggleButton>
+                {/* <ToggleButton value="" sx={{textTransform: 'capitalize', color: 'black'}} name='subject'>Все</ToggleButton> */}
                 <ToggleButton value="math" sx={{textTransform: 'capitalize', color: 'black'}} name='subject'>Математика</ToggleButton>
                 <ToggleButton value="programming" sx={{textTransform: 'capitalize', color: 'black'}} name='subject'>Программирование</ToggleButton>
                 <ToggleButton value="physics" sx={{textTransform: 'capitalize', color: 'black'}} name='subject'>Физика</ToggleButton>
