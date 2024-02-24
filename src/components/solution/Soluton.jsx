@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box,Typography, TextField, IconButton } from "@mui/material";
+import { Box,Typography, TextField, IconButton, Tooltip, Icon } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
 import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
@@ -9,12 +9,14 @@ import Alert from '@mui/material/Alert';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useInfoSolutionContext } from "../../App";
+import chatGptIcon from '../../assets/ChatGPT.svg';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
 function Solution({task, index, setIndexSolution, length}) {
     const theme = useTheme();
     const bgCard = theme.palette.violet.light;
 
-    let {answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer, textNotSuccessAnswer, setTextNotSuccessAnswer} = useInfoSolutionContext();
+    let {answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer, textNotSuccessAnswer, setTextNotSuccessAnswer, answerFromGPT, setAnswerFromGPT} = useInfoSolutionContext();
 
 
     const taskStyle = {
@@ -106,7 +108,6 @@ function Solution({task, index, setIndexSolution, length}) {
     let [isShowSuccessAlert, setIsShowSuccessAlert] = useState(true);
     let [isShowNotSuccessAlert, setIsShowNotSuccessAlert] = useState(false);
     let [buttonHideSolution, setButtonHideSolution] = useState(true);
-    let [answerFromGPT, setAnswerFromGPT] = useState('');
 
     let toggleWindowSolution = () => {setIsOpenWindowSolution(!isOpenWindowSolution)};
 
@@ -150,13 +151,6 @@ function Solution({task, index, setIndexSolution, length}) {
         setButtonHideSolution(true);
     }
 
-    // let hideSolution = () => {
-    //     setIsHideAnswer(true);
-    //     setButtonHideSolution(false);
-    //     setTextNotSuccessAnswer('Чтобы начать заново нажмите на  «Показать решение» -> «Решить заново»');
-    //     setIsShowNotSuccessAlert(true);
-    // }
-
     useEffect(() => {
         if (localStorage.getItem(`${task._id}`) !== null) {
             setAnswerValue(localStorage.getItem(`${task._id}`));
@@ -166,30 +160,42 @@ function Solution({task, index, setIndexSolution, length}) {
         // setAnswerFromGPT('');
     })
 
-    function uploadFile() {
+    function requestToChatGPT() {
+        const extensions = ['.java','.cpp', '.h', '.hpp','.py','.js', '.txt', '.rb','.cs','.go','.swift','.ts','.kt','.rs'];
         const fileInput = document.getElementById('fileInput');
         const file = fileInput.files[0];
     
-        const formData = new FormData();
-        formData.append('file', file);
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
     
-        fetch('/upload', {
-            method: 'POST',
-            body: formData
-        })
-          .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Ошибка! Код http-ответа: ${response.status}`);
-                }
-                return response.json();
-          })
-          .then(data => {
-                console.log(data);
-                setAnswerFromGPT(data.answerFromGPT);
-          })
-          .catch(error => {
-              console.error('Ошибка:', error);
-          });
+            let extensionOfFile = file?.name.split('.');
+            extensionOfFile = '.' + extensionOfFile[extensionOfFile.length-1];
+
+            if (extensions.includes(extensionOfFile) && Number(file.size) / (8*1024*1024) <= 1) {
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Ошибка! Код http-ответа: ${response.status}`);
+                        }
+                        return response.json();
+                })
+                .then(data => {
+                        console.log(data);
+                        setAnswerFromGPT(data.answerFromGPT);
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+                alert('ok!')
+            } else {alert('Размер файла должен быть до 1МБ, и поддерживаются расширения только этих форматов: .java, .cpp, .h, .hpp, .py, .js, .txt, .rb, .cs, .go, .swift, .ts, .kt, .rs');}
+
+
+        } else {alert('Прикрепите файл, чтобы отправить его запрос');}
+
         }
 
     return(
@@ -272,8 +278,18 @@ function Solution({task, index, setIndexSolution, length}) {
                     {isHideAnswer ? '' :
                     <>
                         <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', my: '20px'}}>
-                            <TextField type="file" id="fileInput" accept=".py"></TextField>
-                            <ButtonContained onClick={uploadFile}>Gpt Помоги!</ButtonContained>
+                            <TextField type="file" id="fileInput"></TextField>
+                            <Box sx={{display: 'flex', alignItems: 'center', flexWrap: 'wrap', mt: {md: '0px', xs: '10px'}, flexDirection: {xs: 'row-reverse', md: 'row'}}}>
+                                <Tooltip title="Если вы не понимаете, как решить задачу или хотите сравнить ваш ответ с авторским, можете воспользоваться помощью от чата GPT. Загрузите файл в нужном формате, далее нажмите на кнопку отправки" sx={{mr: '8px'}}>
+                                    <IconButton>
+                                        <QuestionMarkIcon></QuestionMarkIcon>
+                                    </IconButton>
+                                </Tooltip>
+                                <ButtonContained onClick={requestToChatGPT}>
+                                    <img src={chatGptIcon} alt="gpticon" style={{width: '30px', marginRight: '4px'}}/>
+                                    <Box variant='span' sx={{mr: '4px'}}>GPT Помоги!</Box>
+                                </ButtonContained>
+                            </Box>
                         </Box>
                         
                         {answerFromGPT ? 

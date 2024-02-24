@@ -107,11 +107,13 @@ function App() {
   let [answerValue, setAnswerValue] = useState('');
   let [isHideAnswer, setIsHideAnswer] = useState(true);
   let [textNotSuccessAnswer, setTextNotSuccessAnswer] = useState('');
+  let [answerFromGPT, setAnswerFromGPT] = useState('');
+
 
   return (
     <ThemeProvider theme={theme}>
       <ArrayContext.Provider value={{contextArrayTasks, setContextArrayTasks, numberOfPage, setNumberOfPage, page, setPage}}>
-        <InfoSolutionContext.Provider value={{answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer, textNotSuccessAnswer, setTextNotSuccessAnswer}}>
+        <InfoSolutionContext.Provider value={{answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer, textNotSuccessAnswer, setTextNotSuccessAnswer, answerFromGPT, setAnswerFromGPT}}>
             <Box sx={{
               pt: "12px",
               pb: '12px'

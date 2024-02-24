@@ -4,7 +4,7 @@ import { useArrayContext, useInfoSolutionContext } from '../../App.js';
 
 function Filters() {
     let {setContextArrayTasks, setNumberOfPage, page} = useArrayContext();
-    let {setIsHideAnswer, setTextNotSuccessAnswer} = useInfoSolutionContext();
+    let {setIsHideAnswer, setTextNotSuccessAnswer, setAnswerFromGPT} = useInfoSolutionContext();
 
     const filterStyle = {
         display: 'flex',
@@ -29,7 +29,8 @@ function Filters() {
 
     useEffect(() => {
         setIsHideAnswer(true);
-        setTextNotSuccessAnswer('')
+        setTextNotSuccessAnswer('');
+        setAnswerFromGPT('')
 
         fetch(`/taskByFilter/?difficult=${dataForm.difficult}&subject=${dataForm.subject}&year=${dataForm.year}&page=${page}`)
             .then(data => data.json())
