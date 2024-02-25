@@ -278,7 +278,7 @@ function Solution({task, index, setIndexSolution, length}) {
                     {isHideAnswer ? '' :
                     <>
                         <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', my: '20px'}}>
-                            <TextField type="file" id="fileInput"></TextField>
+                            <TextField type="file" id="fileInput"ии></TextField>
                             <Box sx={{display: 'flex', alignItems: 'center', flexWrap: 'wrap', mt: {md: '0px', xs: '10px'}, flexDirection: {xs: 'row-reverse', md: 'row'}}}>
                                 <Tooltip title="Если вы не понимаете, как решить задачу или хотите сравнить ваш ответ с авторским, можете воспользоваться помощью от чата GPT. Загрузите файл в нужном формате, далее нажмите на кнопку отправки" sx={{mr: '8px'}}>
                                     <IconButton>
