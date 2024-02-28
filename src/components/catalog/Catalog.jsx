@@ -1,9 +1,10 @@
 import { Box, Grid, Typography, Pagination} from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TaskCard from "../taskCard/TaskCard";
 import Solution from "../solution/Soluton";
 import { useInfoSolutionContext, useArrayContext } from '../../App.js';
 import { useTheme } from "@emotion/react";
+
 
 function Catalog() {
     const theme = useTheme();

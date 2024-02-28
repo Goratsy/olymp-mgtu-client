@@ -3,9 +3,9 @@ import Toolbar from '@mui/material/Toolbar';
 import bgNavbar from '../../assets/bgNavbar.jpg';
 import iconMgtu from '../../assets/iconMgtu.png'
 import { Box, Link } from '@mui/material';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+// import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+// import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import TranslateOutlinedIcon from '@mui/icons-material/TranslateOutlined';
 import { useTheme } from '@emotion/react';
 
@@ -44,13 +44,13 @@ export default function Navbar() {
     cursor: 'pointer',
     transition: '200ms ease'
   };
-  let accountIconStyle = {
-    fontSize: 48,
-    color: '#fff',
-    ':hover': {color: theme.palette.grey.light},
-    cursor: 'pointer',
-    transition: '200ms ease'
-  }
+  // let accountIconStyle = {
+  //   fontSize: 48,
+  //   color: '#fff',
+  //   ':hover': {color: theme.palette.grey.light},
+  //   cursor: 'pointer',
+  //   transition: '200ms ease'
+  // }
   
   return (
       <Box position="static" sx={navbarStyle}>

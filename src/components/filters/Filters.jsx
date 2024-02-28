@@ -45,7 +45,7 @@ function Filters() {
     
     return (
         <Box sx={filterStyle}>
-            <FormControl sx={{minWidth: 140}} size="small">
+            <FormControl sx={{minWidth: 160, width: {md: 160, xs: '35vw'}}} size="small">
                 <InputLabel id="difficult-label" >Сложность</InputLabel>
                 <Select
                     labelId="difficult-label"
@@ -56,9 +56,7 @@ function Filters() {
                     value={dataForm.difficult}
                     name='difficult'
                 >
-                    <MenuItem value=''>
-                        <em>Все</em>
-                    </MenuItem>
+                    <MenuItem value=''>Все</MenuItem>
                     <MenuItem value='Легкая'>Легкая</MenuItem>
                     <MenuItem value='Средняя'>Средняя</MenuItem>
                     <MenuItem value='Тяжелая'>Тяжелая</MenuItem>
@@ -79,7 +77,7 @@ function Filters() {
                 <ToggleButton value="physics" sx={{textTransform: 'capitalize', color: 'black'}} name='subject'>Физика</ToggleButton>
             </ToggleButtonGroup>
             
-            <FormControl sx={{ minWidth: 140 }} size="small">
+            <FormControl sx={{minWidth: 160, width: {md: 160, xs: '35vw'}}} size="small">
                 <InputLabel id="year-label">Год</InputLabel>
                 <Select
                     labelId="year-label"
@@ -90,9 +88,7 @@ function Filters() {
                     onChange={controlForms}
                     name='year'
                 >
-                    <MenuItem value=''>
-                        <em>Все</em>
-                    </MenuItem>
+                    <MenuItem value=''>Все</MenuItem>
                     <MenuItem value='2023'>2023</MenuItem>
                     <MenuItem value='2022'>2022</MenuItem>
                     <MenuItem value='2021'>2021</MenuItem>

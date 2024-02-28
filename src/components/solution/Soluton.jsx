@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box,Typography, TextField, IconButton, Tooltip, Icon } from "@mui/material";
+import { Box,Typography, TextField, IconButton, Tooltip, ClickAwayListener } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
 import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
@@ -11,6 +11,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useInfoSolutionContext } from "../../App";
 import chatGptIcon from '../../assets/ChatGPT.svg';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import Loading from '../../assets/loading1.svg';
 
 function Solution({task, index, setIndexSolution, length}) {
     const theme = useTheme();
@@ -55,7 +56,7 @@ function Solution({task, index, setIndexSolution, length}) {
         display: 'flex',
         flexWrap: 'wrap', 
         gap: '8px', 
-        justifyContent: {md: 'flex-end', xs: 'flex-start'}, 
+        justifyContent: {lg: 'flex-end', xs: 'flex-start'}, 
         mt: '20px'
     }
     
@@ -108,6 +109,13 @@ function Solution({task, index, setIndexSolution, length}) {
     let [isShowSuccessAlert, setIsShowSuccessAlert] = useState(true);
     let [isShowNotSuccessAlert, setIsShowNotSuccessAlert] = useState(false);
     let [buttonHideSolution, setButtonHideSolution] = useState(true);
+    let [IsOpenTooltip, setIsOpenTooltip] = useState(false);
+    let [IsLoading, setIsLoading] = useState(false);
+
+    const CloseTooltip = () => {setIsOpenTooltip(false);};
+    const ToggleTooltip = () => {setIsOpenTooltip(!IsOpenTooltip);};
+    
+
 
     let toggleWindowSolution = () => {setIsOpenWindowSolution(!isOpenWindowSolution)};
 
@@ -157,13 +165,13 @@ function Solution({task, index, setIndexSolution, length}) {
         } else {
             setAnswerValue('');
         }
-        // setAnswerFromGPT('');
     })
 
     function requestToChatGPT() {
         const extensions = ['.java','.cpp', '.h', '.hpp','.py','.js', '.txt', '.rb','.cs','.go','.swift','.ts','.kt','.rs'];
         const fileInput = document.getElementById('fileInput');
         const file = fileInput.files[0];
+        
     
         if (file) {
             const formData = new FormData();
@@ -173,6 +181,8 @@ function Solution({task, index, setIndexSolution, length}) {
             extensionOfFile = '.' + extensionOfFile[extensionOfFile.length-1];
 
             if (extensions.includes(extensionOfFile) && Number(file.size) / (8*1024*1024) <= 1) {
+                setIsLoading(true);
+
                 fetch('/upload', {
                     method: 'POST',
                     body: formData
@@ -186,9 +196,11 @@ function Solution({task, index, setIndexSolution, length}) {
                 .then(data => {
                         console.log(data);
                         setAnswerFromGPT(data.answerFromGPT);
+                        setIsLoading(false);
                 })
                 .catch(error => {
                     console.error('Ошибка:', error);
+                    setIsLoading(false)
                 });
                 alert('ok!')
             } else {alert('Размер файла должен быть до 1МБ, и поддерживаются расширения только этих форматов: .java, .cpp, .h, .hpp, .py, .js, .txt, .rb, .cs, .go, .swift, .ts, .kt, .rs');}
@@ -197,6 +209,7 @@ function Solution({task, index, setIndexSolution, length}) {
         } else {alert('Прикрепите файл, чтобы отправить его запрос');}
 
         }
+
 
     return(
         <>
@@ -275,33 +288,50 @@ function Solution({task, index, setIndexSolution, length}) {
                         }
                     </Box>
 
-                    {isHideAnswer ? '' :
-                    <>
-                        <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', my: '20px'}}>
-                            <TextField type="file" id="fileInput"ии></TextField>
-                            <Box sx={{display: 'flex', alignItems: 'center', flexWrap: 'wrap', mt: {md: '0px', xs: '10px'}, flexDirection: {xs: 'row-reverse', md: 'row'}}}>
-                                <Tooltip title="Если вы не понимаете, как решить задачу или хотите сравнить ваш ответ с авторским, можете воспользоваться помощью от чата GPT. Загрузите файл в нужном формате, далее нажмите на кнопку отправки" sx={{mr: '8px'}}>
-                                    <IconButton>
-                                        <QuestionMarkIcon></QuestionMarkIcon>
-                                    </IconButton>
-                                </Tooltip>
-                                <ButtonContained onClick={requestToChatGPT}>
-                                    <img src={chatGptIcon} alt="gpticon" style={{width: '30px', marginRight: '4px'}}/>
-                                    <Box variant='span' sx={{mr: '4px'}}>GPT Помоги!</Box>
-                                </ButtonContained>
-                            </Box>
-                        </Box>
-                        
-                        {answerFromGPT ? 
+                    {(task.subject === 'programming' && !isHideAnswer) ? 
                         <>
-                            <Typography sx={titleMediumStyle}>Ответ от GPT:</Typography>
-                            <Typography sx={bodyLargeStyle}>
-                                {answerFromGPT}
-                            </Typography>
-                        </>
-                        : ''
-                        }
-                    </>
+                            <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', my: '20px', gap:'10px'}}>
+                                <TextField type="file" id="fileInput"></TextField>
+                                <Box sx={{display: 'flex', alignItems: 'center', flexWrap: 'wrap', mt: {md: '0px', xs: '10px'}, flexDirection: {xs: 'row-reverse', lg: 'row'}}}>
+                                    <ClickAwayListener onClickAway={CloseTooltip}>
+                                        <div>
+                                            <Tooltip
+                                                PopperProps={{
+                                                disablePortal: true,
+                                                }}
+                                                onClose={ToggleTooltip}
+                                                open={IsOpenTooltip}
+                                                disableFocusListener
+                                                disableHoverListener
+                                                disableTouchListener
+                                                title="Если вы не понимаете, как решить задачу по программированию или хотите сравнить ваш ответ с авторским, можете воспользоваться помощью от чата GPT. Загрузите файл в нужном формате, далее нажмите на кнопку отправки"
+                                            >
+                                                <IconButton onClick={ToggleTooltip}>
+                                                    <QuestionMarkIcon></QuestionMarkIcon>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </div>
+                                    </ClickAwayListener>
+                                    <ButtonContained onClick={requestToChatGPT}>
+                                        <img src={chatGptIcon} alt="gpticon" style={{width: '30px', marginRight: '4px'}}/>
+                                        <Box variant='span' sx={{mr: '4px'}}>GPT Помоги!</Box>
+                                    </ButtonContained>
+                                </Box>
+                            </Box>
+                            
+                            {answerFromGPT ? 
+                            <>
+                                <Typography sx={titleMediumStyle}>Ответ от GPT:</Typography>
+                                <Typography sx={bodyLargeStyle}>
+                                    {answerFromGPT}
+                                </Typography>
+                            </>
+                            : 
+                            <>
+                            {IsLoading ? <img src={Loading} alt="Loading..." style={{mixBlendMode: 'multiply', width: '60px', height: '60px'}}/> : '' }
+                            </>
+                            }
+                        </> : ''
                     }
                     
                 </Box>
