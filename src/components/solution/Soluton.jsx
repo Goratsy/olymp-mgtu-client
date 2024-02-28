@@ -183,7 +183,7 @@ function Solution({task, index, setIndexSolution, length}) {
             if (extensions.includes(extensionOfFile) && Number(file.size) / (8*1024*1024) <= 1) {
                 setIsLoading(true);
 
-                fetch('/upload', {
+                fetch(`/upload/?id=${task._id}`, {
                     method: 'POST',
                     body: formData
                 })
@@ -202,7 +202,6 @@ function Solution({task, index, setIndexSolution, length}) {
                     console.error('Ошибка:', error);
                     setIsLoading(false)
                 });
-                alert('ok!')
             } else {alert('Размер файла должен быть до 1МБ, и поддерживаются расширения только этих форматов: .java, .cpp, .h, .hpp, .py, .js, .txt, .rb, .cs, .go, .swift, .ts, .kt, .rs');}
 
 
@@ -262,7 +261,7 @@ function Solution({task, index, setIndexSolution, length}) {
                                     <Box sx={{mt: '20px'}} key={`div ${index}`}>
                                         {
                                         array.map((text, index2) => {
-                                            if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}>{text}</Typography>
+                                            if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}><Box sx={{whiteSpace: 'pre-wrap'}}>{text}</Box></Typography>
                                             else {
                                                 return <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"
                                                 key={`solutionText ${index}.${index2}`} style={{width: {md: '70%', xs: '90%'}, mixBlendMode: 'multiply'}}/>
@@ -304,7 +303,7 @@ function Solution({task, index, setIndexSolution, length}) {
                                                 disableFocusListener
                                                 disableHoverListener
                                                 disableTouchListener
-                                                title="Если вы не понимаете, как решить задачу по программированию или хотите сравнить ваш ответ с авторским, можете воспользоваться помощью от чата GPT. Загрузите файл в нужном формате, далее нажмите на кнопку отправки"
+                                                title="Если вы не понимаете, как решить задачу по программированию или хотите сравнить ваш ответ с авторским, можете воспользоваться помощью от чата GPT. Загрузите файл в нужном формате и убедитесь, что в вашем файле написан только необходимый код, чтобы GPT ответил наиболее точно, далее нажмите на кнопку отправки"
                                             >
                                                 <IconButton onClick={ToggleTooltip}>
                                                     <QuestionMarkIcon></QuestionMarkIcon>
@@ -323,7 +322,7 @@ function Solution({task, index, setIndexSolution, length}) {
                             <>
                                 <Typography sx={titleMediumStyle}>Ответ от GPT:</Typography>
                                 <Typography sx={bodyLargeStyle}>
-                                    {answerFromGPT}
+                                    <Box sx={{width: '80%', whiteSpace: 'pre-line'}}>{answerFromGPT}</Box>
                                 </Typography>
                             </>
                             : 
