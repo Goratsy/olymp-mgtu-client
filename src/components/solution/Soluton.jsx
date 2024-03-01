@@ -49,7 +49,7 @@ function Solution({task, index, setIndexSolution, length}) {
     const descriptionStyle = {
         ...theme.typography.body.main,
         color: theme.palette.grey.dark,
-        mt: '10px'
+
     } 
     
     const buttonGroupStyle = {
@@ -66,8 +66,7 @@ function Solution({task, index, setIndexSolution, length}) {
         gap: '16px',
         color: theme.palette.grey.dark, 
         fontSize: '14px', 
-        fontFamily: 'Roboto, sans-serif', 
-    }
+        fontFamily: 'Roboto, sans-serif',     }
     
     const linkToTask = {
         backgroundColor: bgCard,
@@ -183,7 +182,7 @@ function Solution({task, index, setIndexSolution, length}) {
             if (extensions.includes(extensionOfFile) && Number(file.size) / (8*1024*1024) <= 1) {
                 setIsLoading(true);
 
-                fetch(`/upload/?id=${task._id}`, {
+                fetch(`/getSolutionFromGPT/?id=${task._id}`, {
                     method: 'POST',
                     body: formData
                 })
@@ -217,20 +216,22 @@ function Solution({task, index, setIndexSolution, length}) {
                     <Box>
                         <Typography sx={titleMediumStyle}>Задача {index}</Typography>
                         <Typography sx={bodyMainStyle}>
-                            {task.difficult} • {task.year}</Typography>
+                            {task.difficult} • {task.year} • {task.points} баллов</Typography>
                     </Box>
                     <IconButton onClick={toggleWindowSolution}>
                         {isOpenWindowSolution ? <KeyboardArrowUpIcon fontSize="large"></KeyboardArrowUpIcon> : <KeyboardArrowDownIcon fontSize="large"></KeyboardArrowDownIcon>}
                     </IconButton>
                 </Box>
                 <Box variant='span' style={{display: (isOpenWindowSolution ? 'block' : 'none')}}>
+                    {task.imageTasks.length !== 0 ? 
                     <Box sx={{display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap'}}>
                         {task.imageTasks.map((src, index) => {
                             return (
-                                <img src={src} alt={`Изображение ${index+1}`} style={{width: '100%'}} key={`image ${index}`}/>                         
+                                <img src={src} alt={`Изображение ${index+1}`} style={{width: '100%', marginBottom: '10px', mixBlendMode: 'multiply'}} key={`image ${task._id}${index}`}/>                         
                             );
                         })}
                     </Box>
+                    : ''}
                     <Typography sx={descriptionStyle}>{task.description}</Typography>
 
                     <Box sx={groupTextFieldStyle}>
@@ -263,8 +264,10 @@ function Solution({task, index, setIndexSolution, length}) {
                                         array.map((text, index2) => {
                                             if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}><Box sx={{whiteSpace: 'pre-wrap'}}>{text}</Box></Typography>
                                             else {
-                                                return <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"
-                                                key={`solutionText ${index}.${index2}`} style={{width: {md: '70%', xs: '90%'}, mixBlendMode: 'multiply'}}/>
+                                                return <Box sx={{width:'100%'}}>
+                                                        <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"
+                                                        key={`solutionText ${task._id}${index}.${index2}`} style={{width: '100%', mixBlendMode: 'multiply'}}/>
+                                                </Box> 
                                                 }
                                         })
                                         }
@@ -322,7 +325,7 @@ function Solution({task, index, setIndexSolution, length}) {
                             <>
                                 <Typography sx={titleMediumStyle}>Ответ от GPT:</Typography>
                                 <Typography sx={bodyLargeStyle}>
-                                    <Box sx={{width: '80%', whiteSpace: 'pre-line'}}>{answerFromGPT}</Box>
+                                    <Box sx={{width: '80%', whiteSpace: 'preserve'}}>{answerFromGPT}</Box>
                                 </Typography>
                             </>
                             : 

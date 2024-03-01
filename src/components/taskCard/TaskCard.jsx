@@ -16,6 +16,7 @@ function TaskCard({task, index, current, onClickTask}) {
         alignContent: 'stretch',
         gap: '16px',
         p: '16px',
+        width: '95%',
     };
     const labelMainStyle = {
         ...theme.typography.label.main,
@@ -44,7 +45,7 @@ function TaskCard({task, index, current, onClickTask}) {
             </Box>
             <Box>
                 <Typography  sx={labelMainStyle}>{task.difficult} • {task.year}</Typography>
-                <Typography sx={bodyLargeStyle}>Задача {task._id.slice(0, 5)}</Typography>
+                <Typography sx={bodyLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length)-5, (task._id.length))}</Typography>
                 <Typography sx={descriptionStyle}>{task.description.slice(0, 130)+'...'}</Typography>    
             </Box>
             <Box>

@@ -3,7 +3,7 @@ import { Box, ToggleButtonGroup, ToggleButton, FormControl, InputLabel, Select, 
 import { useArrayContext, useInfoSolutionContext } from '../../App.js';
 
 function Filters() {
-    let {setContextArrayTasks, setNumberOfPage, page} = useArrayContext();
+    let {setContextArrayTasks, setNumberOfPage, page, setIndexSolution} = useArrayContext();
     let {setIsHideAnswer, setTextNotSuccessAnswer, setAnswerFromGPT} = useInfoSolutionContext();
 
     const filterStyle = {
@@ -18,19 +18,24 @@ function Filters() {
     let [dataForm, setDataForm] = useState({difficult: '', subject: 'math', year: ''});
 
     let controlForms = (e) => {
-        if (e.target.name === 'difficult') {
-            setDataForm({difficult: e.target.value, subject: dataForm.subject, year: dataForm.year});
-        } else if (e.target.name === 'subject') {
-            setDataForm({difficult: dataForm.difficult, subject: e.target.value, year: dataForm.year});
-        } else if (e.target.name === 'year') {
-            setDataForm({difficult: dataForm.difficult, subject: dataForm.subject, year: e.target.value});
+        try {
+            if (e?.target.name === 'difficult') {
+                setDataForm({difficult: e.target.value, subject: dataForm.subject, year: dataForm.year});
+            } else if (e?.target.name === 'subject') {
+                setDataForm({difficult: dataForm.difficult, subject: e.target.value, year: dataForm.year});
+            } else if (e?.target.name === 'year') {
+                setDataForm({difficult: dataForm.difficult, subject: dataForm.subject, year: e.target.value});
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 
     useEffect(() => {
         setIsHideAnswer(true);
         setTextNotSuccessAnswer('');
-        setAnswerFromGPT('')
+        setAnswerFromGPT('');
+        setIndexSolution(0);
 
         fetch(`/taskByFilter/?difficult=${dataForm.difficult}&subject=${dataForm.subject}&year=${dataForm.year}&page=${page}`)
             .then(data => data.json())
