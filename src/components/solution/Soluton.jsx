@@ -235,6 +235,7 @@ function Solution({task, index, setIndexSolution, length}) {
                     : ''}
                     <Typography sx={descriptionStyle}>{task.description}</Typography>
 
+                    {task.subject !== 'programming' ? 
                     <Box sx={groupTextFieldStyle}>
                         <TextField id="answerInput" label="Ответ" variant="outlined"  sx={{width: '100%'}} disabled={!buttonHideSolution} 
                             value={answerValue}
@@ -246,21 +247,32 @@ function Solution({task, index, setIndexSolution, length}) {
                         />
                         <Typography fontSize='small' sx={{color:'#B3261E', display: (isShowNotSuccessAlert ? 'block' : 'none')}}>{textNotSuccessAnswer}</Typography>
                     </Box>
+                    : ''}
 
                     <Box sx={solutionStyle}>
-                        <Box variant='span' sx={{display: (isShowSuccessAlert ? 'block' : 'none')}}>
-                            <Alert icon={false} severity="success" sx={{borderRadius: '12px', }}
-                             onClose={() => {setIsShowSuccessAlert(false)}}>🥳  Правильный ответ</Alert>
-                        </Box>
+                        {task.subject !== 'programming' ? 
+                        <>
+                            <Box variant='span' sx={{display: (isShowSuccessAlert ? 'block' : 'none')}}>
+                                <Alert icon={false} severity="success" sx={{borderRadius: '12px', }}
+                                onClose={() => {setIsShowSuccessAlert(false)}}>🥳  Правильный ответ</Alert>
+                            </Box>
+                            <Box sx={{my: '16px'}}>
+                                <Typography sx={titleMediumStyle}>Решение</Typography>
+                                <Typography sx={bodyMainStyle}>Ответ: {task.answer}</Typography>
+                            </Box>
+                        </>
+                        : 
                         <Box sx={{my: '16px'}}>
-                            <Typography sx={titleMediumStyle}>Решение</Typography>
-                            <Typography sx={bodyMainStyle}>Ответ: {task.answer}</Typography>
+                                <Typography sx={titleMediumStyle}>Хотите узнать правильность решения? Воспользуйтесь chatGPT</Typography>
                         </Box>
+                        }
 
                         <Box sx={answerStyle}>
                             {task.solution.map((array, index) => {
+                                console.log(task._id, index)
+
                                 return (
-                                    <Box sx={{mt: '20px'}} key={`div ${index}`}>
+                                    <Box sx={{mt: '20px'}} key={`div ${task._id}${index}`}>
                                         {
                                         array.map((text, index2) => {
                                             if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}><Box sx={{whiteSpace: 'pre-wrap'}}>{text}</Box></Typography>
@@ -277,12 +289,15 @@ function Solution({task, index, setIndexSolution, length}) {
                             })}
                         </Box>
                     </Box>
-
+                    
+                    
                     <Box sx={buttonGroupStyle}>
                         {isHideAnswer ? 
                         <>
                             <ButtonOutlined onClick={showAnswer}>Показать решение</ButtonOutlined>
+                            {task.subject !== 'programming' ? 
                             <ButtonContained onClick={checkAnswer}>Проверить ответ</ButtonContained>
+                            : ''}
                         </>
                         :
                         <>
@@ -290,8 +305,9 @@ function Solution({task, index, setIndexSolution, length}) {
                         </>
                         }
                     </Box>
+                    
 
-                    {(task.subject === 'programming' && !isHideAnswer) ? 
+                    {(task.subject === 'programming') ? 
                         <>
                             <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', my: '20px', gap:'10px'}}>
                                 <TextField type="file" id="fileInput"></TextField>

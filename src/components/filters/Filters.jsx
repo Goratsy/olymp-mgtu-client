@@ -37,7 +37,6 @@ function Filters() {
         setTextNotSuccessAnswer('');
         setAnswerFromGPT('');
         setIndexSolution(0); 
-
         fetch(`${urlBase}/taskByFilter/?difficult=${dataForm.difficult}&subject=${dataForm.subject}&year=${dataForm.year}&page=${page}`)
             .then(data => data.json())
             .then(res => {

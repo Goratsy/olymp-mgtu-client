@@ -25,7 +25,7 @@ function Catalog() {
     const catalogStyle = {
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'stretch',
         flexDirection: 'column',
         borderRadius: '12px',
         overflow: 'hidden',
@@ -41,29 +41,25 @@ function Catalog() {
         overflow: 'hidden'
     };
     return(
-        <Grid container spacing={3} columns={{md: 4, xs: 2}} direction={{md: "row", xs: 'column-reverse'}} sx={{minHeight: {md: '400px', xs: '200px'}}}>
-            <Grid item xs={2}>
-                <Box sx={catalogStyle}>
-                    {contextArrayTasks.length === 0 
-                    ? <Typography>🤔 Нет таких задач! Упростите фильтры.</Typography>
-                    : contextArrayTasks.map((data, index) => {
-                        return (<TaskCard task={data} index={index+1} current={(indexSolution === index)} key={data._id} 
-                        onClickTask={() => {
-                            setIndexSolution(index);
-                            setAnswerValue('');
-                            setIsHideAnswer(true);
-                        }}></TaskCard>)
-                    })}
-                </Box>
-                {contextArrayTasks.length === 0 
-                    ? ''
-                    : 
+        <Grid container spacing={3} columns={{md: 4, xs: 2}} justifyContent={'center'} direction={{md: "row", xs: 'column-reverse'}} sx={{minHeight: {md: '400px', xs: '200px'}}}>
+            {contextArrayTasks.length === 0 
+            ? '' : 
+                <Grid item xs={2}>
+                    <Box sx={catalogStyle}>
+                        {contextArrayTasks.map((data, index) => {
+                            return (<TaskCard task={data} index={index+1} current={(indexSolution === index)} key={data._id} 
+                            onClickTask={() => {
+                                setIndexSolution(index);
+                                setAnswerValue('');
+                                setIsHideAnswer(true);
+                            }}></TaskCard>)
+                        })}
+                    </Box>
                     <Box sx={{display: 'flex', justifyContent: 'center', mt: '30px'}}>
                         <Pagination count={numberOfPage} variant="outlined" color="secondary" onChange={changePage}/>
                     </Box>
-                    }
-                
-            </Grid>
+                </Grid>
+            }
             <Grid item xs={2}>
                 {(contextArrayTasks.length !== 0 && contextArrayTasks.length > indexSolution)? 
                 <Solution task={contextArrayTasks[indexSolution]} index={indexSolution+1} 

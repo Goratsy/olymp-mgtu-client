@@ -16,7 +16,6 @@ function TaskCard({task, index, current, onClickTask}) {
         alignContent: 'stretch',
         gap: '16px',
         p: '16px',
-        width: '95%',
     };
     const labelMainStyle = {
         ...theme.typography.label.main,
@@ -38,18 +37,20 @@ function TaskCard({task, index, current, onClickTask}) {
     }
 
     return(
-        <Box sx={cardStyle} onClick={onClickTask}>
-            <Box>
-                {task.executionStage === '' ? <RemoveIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.grey.main}}></RemoveIcon> : ''}
-                {task.executionStage === 'done' ? <CheckIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.violet.main}}></CheckIcon> : ''}
-            </Box>
-            <Box>
-                <Typography  sx={labelMainStyle}>{task.difficult} • {task.year}</Typography>
-                <Typography sx={bodyLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length)-5, (task._id.length))}</Typography>
-                <Typography sx={descriptionStyle}>{task.description.slice(0, 130)+'...'}</Typography>    
-            </Box>
-            <Box>
-                <ArrowRightIcon sx={{fontSize: '24px'}}></ArrowRightIcon>
+        <Box onClick={onClickTask}>
+            <Box sx={cardStyle} >
+                <Box sx={{width: '5%', ml: '10px'}}>
+                    {task.executionStage === '' ? <RemoveIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.grey.main}}></RemoveIcon> : ''}
+                    {task.executionStage === 'done' ? <CheckIcon sx={{fontSize: '24px', display: 'block', color: theme.palette.violet.main}}></CheckIcon> : ''}
+                </Box>
+                <Box sx={{width: '90%'}}>
+                    <Typography  sx={labelMainStyle}>{task.difficult} • {task.year}</Typography>
+                    <Typography sx={bodyLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length)-5, (task._id.length))}</Typography>
+                    <Typography sx={descriptionStyle}>{task.description.slice(0, 130)+'...'}</Typography>    
+                </Box>
+                <Box sx={{width: '5%'}}>
+                    <ArrowRightIcon sx={{fontSize: '24px'}}></ArrowRightIcon>
+                </Box>
             </Box>
         </Box>
     );
