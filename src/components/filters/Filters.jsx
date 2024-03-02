@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, ToggleButtonGroup, ToggleButton, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { useArrayContext, useInfoSolutionContext } from '../../App.js';
+import { urlBase } from "../../config.js";
 
 function Filters() {
     let {setContextArrayTasks, setNumberOfPage, page, setIndexSolution} = useArrayContext();
@@ -35,16 +36,16 @@ function Filters() {
         setIsHideAnswer(true);
         setTextNotSuccessAnswer('');
         setAnswerFromGPT('');
-        setIndexSolution(0);
+        setIndexSolution(0); 
 
-        fetch(`/taskByFilter/?difficult=${dataForm.difficult}&subject=${dataForm.subject}&year=${dataForm.year}&page=${page}`)
+        fetch(`${urlBase}/taskByFilter/?difficult=${dataForm.difficult}&subject=${dataForm.subject}&year=${dataForm.year}&page=${page}`)
             .then(data => data.json())
             .then(res => {
                 setContextArrayTasks(res.tasks); 
                 setNumberOfPage(res.numberOfpage);
             })
             .catch(err => {console.log(err);});        
-      }, [dataForm, page]);
+    }, [dataForm, page]);
 
 
     

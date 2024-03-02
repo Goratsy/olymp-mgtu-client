@@ -12,6 +12,7 @@ import { useInfoSolutionContext } from "../../App";
 import chatGptIcon from '../../assets/ChatGPT.svg';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import Loading from '../../assets/loading1.svg';
+import { urlBase } from "../../config";
 
 function Solution({task, index, setIndexSolution, length}) {
     const theme = useTheme();
@@ -133,7 +134,7 @@ function Solution({task, index, setIndexSolution, length}) {
                 throw new Error('Вводимые в поле данные должны быть числами!');
             }
 
-            await fetch(`/checkAnswer/?id=${task._id}&answer=${answerValue}`)
+            await fetch(`${urlBase}/checkAnswer/?id=${task._id}&answer=${answerValue}`)
                 .then(data => data.json())
                 .then(data => {isCorrectAnswer = data.isCorrectAnswer});
 
@@ -182,7 +183,7 @@ function Solution({task, index, setIndexSolution, length}) {
             if (extensions.includes(extensionOfFile) && Number(file.size) / (8*1024*1024) <= 1) {
                 setIsLoading(true);
 
-                fetch(`/getSolutionFromGPT/?id=${task._id}`, {
+                fetch(`${urlBase}/getSolutionFromGPT/?id=${task._id}`, {
                     method: 'POST',
                     body: formData
                 })
