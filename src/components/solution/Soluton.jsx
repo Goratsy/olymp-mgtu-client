@@ -55,7 +55,6 @@ function Solution({ task, index, setIndexSolution, length }) {
         flexDirection: 'column',
         gap: '12px',
         backgroundColor: bgCard,
-        overflow: 'hidden',
         height: '100%',
         p: '16px'
     };
@@ -204,10 +203,10 @@ function Solution({ task, index, setIndexSolution, length }) {
     useEffect(() => {
         setIsErrorFileList(false);
         setFilesList([]);
-    }, [])
+    }, [task._id])
 
     useEffect(() => {
-        
+
         if (localStorage.getItem(`${task._id}`) !== null) {
             setAnswerValue(localStorage.getItem(`${task._id}`));
         } else {
@@ -216,11 +215,11 @@ function Solution({ task, index, setIndexSolution, length }) {
     })
 
     let changeInputFile = () => {
-        setIsErrorFileList(false); 
+        setIsErrorFileList(false);
         const fileInput = document.getElementById('fileInput');
         const file = fileInput.files[0]
         if (fileInput.files[0]) {
-            if (Math.round(Number(file.size) / 8) <= 1024*1024 && Math.round(Number(file.size) / 8) >= 15) {
+            if (Math.round(Number(file.size) / 8) <= 1024 * 1024 && Math.round(Number(file.size) / 8) >= 15) {
                 setFilesList([fileInput.files[0]])
             } else {
                 setFilesList([fileInput.files[0]])
@@ -237,8 +236,8 @@ function Solution({ task, index, setIndexSolution, length }) {
             const formData = new FormData();
             formData.append('file', file);
             console.log('requestToChatGPT() =>', file);
-        
-            if (Math.ceil(Number(file.size) / 8) <= 1024*1024 && Math.ceil(Number(file.size) / 8) >= 15) {
+
+            if (Math.ceil(Number(file.size) / 8) <= 1024 * 1024 && Math.ceil(Number(file.size) / 8) >= 15) {
                 setIsLoading(true);
 
                 fetch(`${urlBase}/getSolutionFromGPT/?id=${task._id}`, {
@@ -427,7 +426,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                                 :
                                                 <>
                                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                        <UploadFileIcon sx={{  mr: '16px', color: '#D32F2F' }}></UploadFileIcon>
+                                                        <UploadFileIcon sx={{ mr: '16px', color: '#D32F2F' }}></UploadFileIcon>
                                                         <Box>
                                                             <Typography sx={{ fontSize: '16px' }}>{filesList[0].name}</Typography>
                                                             <Typography sx={{ fontSize: '14px' }}>{Math.ceil(Number(filesList[0].size) / 1024 / 8)}Kb • Ошибка размера файла</Typography>
@@ -435,7 +434,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                                         </Box>
                                                     </Box>
                                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                        <IconButton onClick={() => { setFilesList([]);}} sx={{ mr: '16px' }}>
+                                                        <IconButton onClick={() => { setFilesList([]); }} sx={{ mr: '16px' }}>
                                                             <DeleteIcon></DeleteIcon>
                                                         </IconButton>
                                                         <ErrorIcon></ErrorIcon>
@@ -458,25 +457,25 @@ function Solution({ task, index, setIndexSolution, length }) {
                             </Box>
 
                             {answerFromGPT ?
-                                <Box sx={{mt: '48px'}}>
+                                <Box sx={{ mt: '48px' }}>
                                     <Typography sx={titleMediumStyle}>Проверка решения</Typography>
                                     <Typography sx={bodyLargeStyle}>
-                                        <Box sx={{ width: '80%', whiteSpace: 'preserve', mt: '16px'}}>
+                                        <Box sx={{ width: '80%', whiteSpace: 'preserve', mt: '16px' }}>
                                             {answerFromGPT}
                                         </Box>
                                     </Typography>
                                 </Box>
                                 :
                                 <>
-                                    {IsLoading 
-                                    ? 
-                                    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%', py: '48px'}}>
-                                        <img src={Loading} 
-                                        alt="Loading..." 
-                                        style={{ mixBlendMode: 'multiply', width: '60px', height: '60px' }} /> 
-                                        <Typography sx={{color: '#49454F', ...theme.typography.body.main}}>Проверяем решение</Typography>
-                                    </Box>
-                                    : null}
+                                    {IsLoading
+                                        ?
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%', py: '48px' }}>
+                                            <img src={Loading}
+                                                alt="Loading..."
+                                                style={{ mixBlendMode: 'multiply', width: '60px', height: '60px' }} />
+                                            <Typography sx={{ color: '#49454F', ...theme.typography.body.main }}>Проверяем решение</Typography>
+                                        </Box>
+                                        : null}
                                 </>
                             }
                         </> : ''
@@ -527,6 +526,8 @@ function Solution({ task, index, setIndexSolution, length }) {
 
                     sx={{ display: { xs: 'block', md: 'none' } }}
                 >
+
+
                     <Box sx={dialogStyle}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Box>
@@ -579,7 +580,19 @@ function Solution({ task, index, setIndexSolution, length }) {
                                         </Box>
                                     </>
                                     :
-                                    ''
+                                    <>
+                                        <Box sx={{ mb: '16px' }}>
+                                            <Typography sx={titleMediumStyle}>Решение</Typography>
+                                            <Typography sx={bodyMainStyle}>Авторский код:</Typography>
+                                        </Box>
+                                        <Typography sx={{ whiteSpace: 'preserve' }}>
+                                            <Typography component={'pre'} style={{ margin: '0px' }}>
+                                                <Typography component={'code'}>
+                                                    {task.answerCode}
+                                                </Typography>
+                                            </Typography>
+                                        </Typography>
+                                    </>
                                 }
 
                                 <Box sx={answerStyle}>
@@ -603,64 +616,124 @@ function Solution({ task, index, setIndexSolution, length }) {
                                 </Box>
                             </Box>
 
-
-                            <Box sx={buttonGroupStyle}>
-                                {isHideAnswer ?
-                                    <>
-                                        <ButtonOutlined onClick={showAnswer}>Показать решение</ButtonOutlined>
-                                        {task.subject !== 'programming' ?
-                                            <ButtonContained onClick={checkAnswer}>Проверить</ButtonContained>
-                                            : ''}
-                                    </>
-                                    :
-                                    <>
+                            {task.subject !== 'programming' ?
+                                <Box sx={buttonGroupStyle}>
+                                    {(isHideAnswer) ?
+                                        <>
+                                            <ButtonOutlined onClick={showAnswer}>Показать решение</ButtonOutlined>
+                                            <ButtonContained onClick={checkAnswer}>Проверить ответ</ButtonContained>
+                                        </>
+                                        :
                                         <ButtonOutlined onClick={resetSolve}>Сбросить</ButtonOutlined>
-                                    </>
-                                }
-                            </Box>
+                                    }
+                                </Box>
+                                : ''}
 
 
                             {(task.subject === 'programming') ?
                                 <>
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', my: '20px', gap: '10px' }}>
-                                        <TextField type="file" id="fileInput"></TextField>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', mt: { md: '0px', xs: '10px' }, flexDirection: { xs: 'row-reverse', lg: 'row' } }}>
-                                            <ClickAwayListener onClickAway={CloseTooltip}>
-                                                <div>
-                                                    <Tooltip
-                                                        PopperProps={{
-                                                            disablePortal: true,
-                                                        }}
-                                                        onClose={ToggleTooltip}
-                                                        open={IsOpenTooltip}
-                                                        disableFocusListener
-                                                        disableHoverListener
-                                                        disableTouchListener
-                                                        title="Если вы не понимаете, как решить задачу по программированию или хотите сравнить ваш ответ с авторским, можете воспользоваться помощью от чата GPT. Загрузите файл в нужном формате и убедитесь, что в вашем файле написан только необходимый код, чтобы GPT ответил наиболее точно, далее нажмите на кнопку отправки"
-                                                    >
-                                                        <IconButton onClick={ToggleTooltip}>
-                                                            <QuestionMarkIcon></QuestionMarkIcon>
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </div>
-                                            </ClickAwayListener>
-                                            <ButtonContained onClick={requestToChatGPT}>
-                                                <img src={chatGptIcon} alt="gpticon" style={{ width: '30px', marginRight: '4px' }} />
-                                                <Box variant='span' sx={{ mr: '4px' }}>GPT Помоги!</Box>
-                                            </ButtonContained>
-                                        </Box>
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        {filesList.length === 0 ?
+                                            <>
+                                                <TextField
+                                                    accept="text/*"
+                                                    style={{ display: 'none' }}
+                                                    id="fileInput"
+                                                    type="file"
+                                                    inputProps={{
+                                                        accept: '.txt,.py,.js,.html,.css,.java,.cpp',
+                                                    }}
+                                                    onChange={changeInputFile}
+                                                />
+                                                <InputLabel htmlFor="fileInput" sx={inputFilesStyle}>
+                                                    <UploadFileIcon sx={{ color: '#2196F3', mb: '8px' }}></UploadFileIcon>
+                                                    <Typography sx={{ color: '#000000', fontSize: '16px' }}><Typography component="span" style={{ color: '#2196F3', textDecoration: 'underline #2196F3' }}>Выберите файл</Typography> или перетащите его сюда</Typography>
+                                                    <Typography sx={{ fontSize: '14px' }}>TXT, PY, JS, JAVA (макс. 1MB)</Typography>
+                                                </InputLabel>
+                                            </>
+                                            :
+                                            <>
+                                                <Box sx={{
+                                                    width: '100%',
+                                                    my: '24px',
+                                                    p: '16px',
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center',
+                                                    backgroundColor: '#F3EDF7',
+                                                    color: (!isErrorFileList ? '#615F63' : '#D32F2F')
+                                                }}>
+                                                    {!isErrorFileList ?
+                                                        <>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <UploadFileIcon sx={{ color: '#2196F3', mr: '16px' }}></UploadFileIcon>
+                                                                <Box>
+                                                                    <Typography sx={{ fontSize: '16px', color: '#000000' }}>{filesList[0].name}</Typography>
+                                                                    <Typography sx={{ fontSize: '14px' }}>{Math.ceil(Number(filesList[0].size) / 1024 / 8)}Kb • Готов к отправке</Typography>
+
+                                                                </Box>
+                                                            </Box>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <IconButton onClick={() => { setFilesList([]); }} sx={{ mr: '16px' }}>
+                                                                    <DeleteIcon></DeleteIcon>
+
+                                                                </IconButton>
+                                                                <CheckCircleIcon color='success'></CheckCircleIcon>
+                                                            </Box>
+                                                        </>
+                                                        :
+                                                        <>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <UploadFileIcon sx={{ mr: '16px', color: '#D32F2F' }}></UploadFileIcon>
+                                                                <Box>
+                                                                    <Typography sx={{ fontSize: '16px' }}>{filesList[0].name}</Typography>
+                                                                    <Typography sx={{ fontSize: '14px' }}>{Math.ceil(Number(filesList[0].size) / 1024 / 8)}Kb • Ошибка размера файла</Typography>
+
+                                                                </Box>
+                                                            </Box>
+                                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                                <IconButton onClick={() => { setFilesList([]); }} sx={{ mr: '16px' }}>
+                                                                    <DeleteIcon></DeleteIcon>
+                                                                </IconButton>
+                                                                <ErrorIcon></ErrorIcon>
+                                                            </Box>
+                                                        </>
+                                                    }
+
+                                                </Box>
+                                            </>
+                                        }
+
+                                        {(isHideAnswer) ?
+                                            <ButtonOutlined onClick={showAnswer}>Показать решение</ButtonOutlined>
+                                            :
+                                            <ButtonOutlined onClick={resetSolve}>Скрыть</ButtonOutlined>
+                                        }
+
+                                        <ButtonContained onClick={requestToChatGPT}>Проверить</ButtonContained>
+
                                     </Box>
 
                                     {answerFromGPT ?
-                                        <>
-                                            <Typography sx={titleMediumStyle}>Ответ от GPT:</Typography>
+                                        <Box sx={{ mt: '48px' }}>
+                                            <Typography sx={titleMediumStyle}>Проверка решения</Typography>
                                             <Typography sx={bodyLargeStyle}>
-                                                <Box sx={{ width: '80%', whiteSpace: 'preserve' }}>{answerFromGPT}</Box>
+                                                <Box sx={{ width: '80%', whiteSpace: 'preserve', mt: '16px' }}>
+                                                    {answerFromGPT}
+                                                </Box>
                                             </Typography>
-                                        </>
+                                        </Box>
                                         :
                                         <>
-                                            {IsLoading ? <img src={Loading} alt="Loading..." style={{ mixBlendMode: 'multiply', width: '60px', height: '60px' }} /> : ''}
+                                            {IsLoading
+                                                ?
+                                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px', width: '100%', py: '48px' }}>
+                                                    <img src={Loading}
+                                                        alt="Loading..."
+                                                        style={{ mixBlendMode: 'multiply', width: '60px', height: '60px' }} />
+                                                    <Typography sx={{ color: '#49454F', ...theme.typography.body.main }}>Проверяем решение</Typography>
+                                                </Box>
+                                                : null}
                                         </>
                                     }
                                 </> : ''
