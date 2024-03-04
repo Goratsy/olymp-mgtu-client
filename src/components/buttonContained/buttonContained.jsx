@@ -15,6 +15,8 @@ function ButtonContained(props) {
         color: theme.palette.white.main,
         py: '10px',
         px: '24px',
+        // py: {md: '10px', xs: ''},
+        // px: {md: '24px', xs: ''},
         borderRadius: '100px',
         textTransform: 'none',
         ':hover': {
@@ -23,7 +25,7 @@ function ButtonContained(props) {
     }
     
     return (
-        <Button {...props} sx={buttonStyle}>
+        <Button {...props} sx={buttonStyle} >
             {props.children}
         </Button>
     );

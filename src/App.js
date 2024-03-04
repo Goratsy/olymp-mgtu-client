@@ -63,7 +63,7 @@ const theme = createTheme({
         fontFamily: 'Roboto, sans-serif',
         fontSize: '14px',
         fontWeight: '400',
-        lineHeight: '20px'
+        lineHeight: '20px',
       },
     },
     label: {
@@ -83,6 +83,12 @@ const theme = createTheme({
         fontFamily: 'Pobeda',
         fontWeight:'bold', 
         fontSize: '80px'
+      },
+      large: {
+        fontFamily: 'Roboto, sans-serif',
+        fontSize: '22px',
+        fontWeight: '400',
+        lineHeight: '28px'
       },
       medium: {
         fontFamily: 'Roboto, sans-serif',
@@ -110,11 +116,12 @@ function App() {
   let [answerFromGPT, setAnswerFromGPT] = useState('');
   let [indexSolution, setIndexSolution] = useState(0);
 
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
 
   return (
     <ThemeProvider theme={theme}>
       <ArrayContext.Provider value={{contextArrayTasks, setContextArrayTasks, numberOfPage, setNumberOfPage, page, setPage, indexSolution, setIndexSolution}}>
-        <InfoSolutionContext.Provider value={{answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer, textNotSuccessAnswer, setTextNotSuccessAnswer, answerFromGPT, setAnswerFromGPT}}>
+        <InfoSolutionContext.Provider value={{answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer, textNotSuccessAnswer, setTextNotSuccessAnswer, answerFromGPT, setAnswerFromGPT, isOpenDialog, setIsOpenDialog}}>
             <Box sx={{
               pt: "12px",
               pb: '12px'

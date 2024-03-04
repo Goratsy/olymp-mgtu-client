@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box,Typography, TextField, IconButton, Tooltip, ClickAwayListener } from "@mui/material";
+import { Box,Typography, TextField, IconButton, Tooltip, ClickAwayListener, Dialog, useMediaQuery } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
 import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
@@ -13,16 +13,17 @@ import chatGptIcon from '../../assets/ChatGPT.svg';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import Loading from '../../assets/loading1.svg';
 import { urlBase } from "../../config";
+import CloseIcon from '@mui/icons-material/Close';
 
 function Solution({task, index, setIndexSolution, length}) {
     const theme = useTheme();
     const bgCard = theme.palette.violet.light;
-
-    let {answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer, textNotSuccessAnswer, setTextNotSuccessAnswer, answerFromGPT, setAnswerFromGPT} = useInfoSolutionContext();
+    let mediaDialog = useMediaQuery('(max-width:900px)');
+    let {answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer, textNotSuccessAnswer, setTextNotSuccessAnswer, answerFromGPT, setAnswerFromGPT, isOpenDialog, setIsOpenDialog} = useInfoSolutionContext();
 
 
     const taskStyle = {
-        display: 'flex',
+        display: {xs: 'none', md: 'flex'},
         flexDirection: 'column',
         gap: '12px',
         backgroundColor: bgCard,
@@ -31,9 +32,24 @@ function Solution({task, index, setIndexSolution, length}) {
         p: '16px',
         overflow: 'hidden'
     };
+
+    const dialogStyle = {
+        display: {xs: 'flex', md: 'none'},
+        flexDirection: 'column',
+        gap: '12px',
+        backgroundColor: bgCard,
+        overflow: 'hidden',
+        height: '100%',
+        p: '16px'
+    };
     
     const titleMediumStyle = {
         ...theme.typography.titles.medium,
+        color: theme.palette.black.main
+    }
+
+    const titleLargeStyle = {
+        ...theme.typography.titles.large,
         color: theme.palette.black.main
     }
 
@@ -57,8 +73,8 @@ function Solution({task, index, setIndexSolution, length}) {
         display: 'flex',
         flexWrap: 'wrap', 
         gap: '8px', 
-        justifyContent: {lg: 'flex-end', xs: 'flex-start'}, 
-        mt: '20px'
+        justifyContent: 'space-between', 
+        mt: '28px'
     }
     
     const answerStyle = {
@@ -67,7 +83,8 @@ function Solution({task, index, setIndexSolution, length}) {
         gap: '16px',
         color: theme.palette.grey.dark, 
         fontSize: '14px', 
-        fontFamily: 'Roboto, sans-serif',     }
+        fontFamily: 'Roboto, sans-serif',     
+    }
     
     const linkToTask = {
         backgroundColor: bgCard,
@@ -96,11 +113,11 @@ function Solution({task, index, setIndexSolution, length}) {
     let groupTextFieldStyle = {
         display: (isHideAnswer ? 'block' : 'none'),
         width: '100%', 
-        mt: '12px',  
+        mt: '24px',  
     }
     
     let solutionStyle = {
-        mt: '12px',  
+        mt: '16px',  
         width: '100%', 
         display: (isHideAnswer ? 'none' : 'block')
     }
@@ -114,8 +131,6 @@ function Solution({task, index, setIndexSolution, length}) {
 
     const CloseTooltip = () => {setIsOpenTooltip(false);};
     const ToggleTooltip = () => {setIsOpenTooltip(!IsOpenTooltip);};
-    
-
 
     let toggleWindowSolution = () => {setIsOpenWindowSolution(!isOpenWindowSolution)};
 
@@ -154,6 +169,7 @@ function Solution({task, index, setIndexSolution, length}) {
     }
 
     let resetSolve = () => {
+        localStorage.setItem(`${task._id}`, '')
         setIsHideAnswer(true);
         setTextNotSuccessAnswer('');
         setButtonHideSolution(true);
@@ -171,6 +187,7 @@ function Solution({task, index, setIndexSolution, length}) {
         const extensions = ['.java','.cpp', '.h', '.hpp','.py','.js', '.txt', '.rb','.cs','.go','.swift','.ts','.kt','.rs'];
         const fileInput = document.getElementById('fileInput');
         const file = fileInput.files[0];
+        setAnswerFromGPT('')
         
     
         if (file) {
@@ -194,7 +211,6 @@ function Solution({task, index, setIndexSolution, length}) {
                         return response.json();
                 })
                 .then(data => {
-                        console.log(data);
                         setAnswerFromGPT(data.answerFromGPT);
                         setIsLoading(false);
                 })
@@ -209,30 +225,34 @@ function Solution({task, index, setIndexSolution, length}) {
 
         }
 
+    const closeDialog = () => {setIsOpenDialog(false);};
+
 
     return(
         <>
             <Box sx={taskStyle}>
                 <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
                     <Box>
-                        <Typography sx={titleMediumStyle}>Задача {index}</Typography>
-                        <Typography sx={bodyMainStyle}>
-                            {task.difficult} • {task.year} • {task.points} баллов</Typography>
+                        <Typography sx={titleLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length)-5, (task._id.length))}</Typography>
+                        <Typography sx={bodyMainStyle}>{task.difficult} • {task.year} • {task.points} баллов</Typography>
                     </Box>
                     <IconButton onClick={toggleWindowSolution}>
                         {isOpenWindowSolution ? <KeyboardArrowUpIcon fontSize="large"></KeyboardArrowUpIcon> : <KeyboardArrowDownIcon fontSize="large"></KeyboardArrowDownIcon>}
                     </IconButton>
                 </Box>
-                <Box variant='span' style={{display: (isOpenWindowSolution ? 'block' : 'none')}}>
+
+                <Box variant='span' sx={{display: (isOpenWindowSolution ? 'block' : 'none')}}>
+
                     {task.imageTasks.length !== 0 ? 
                     <Box sx={{display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap'}}>
                         {task.imageTasks.map((src, index) => {
                             return (
-                                <img src={src} alt={`Изображение ${index+1}`} style={{width: '100%', marginBottom: '10px', mixBlendMode: 'multiply'}} key={`image ${task._id}${index}`}/>                         
+                                <img src={src} alt={`Изображение ${index+1}`} style={{width: '100%', marginBottom: '16px', mixBlendMode: 'multiply'}} key={`image ${task._id}${index}`}/>                         
                             );
                         })}
                     </Box>
                     : ''}
+
                     <Typography sx={descriptionStyle}>{task.description}</Typography>
 
                     {task.subject !== 'programming' ? 
@@ -253,7 +273,7 @@ function Solution({task, index, setIndexSolution, length}) {
                         {task.subject !== 'programming' ? 
                         <>
                             <Box variant='span' sx={{display: (isShowSuccessAlert ? 'block' : 'none')}}>
-                                <Alert icon={false} severity="success" sx={{borderRadius: '12px', }}
+                                <Alert icon={false} sx={{borderRadius: '12px', bgcolor: theme.palette.grey.light}}
                                 onClose={() => {setIsShowSuccessAlert(false)}}>🥳  Правильный ответ</Alert>
                             </Box>
                             <Box sx={{my: '16px'}}>
@@ -269,10 +289,8 @@ function Solution({task, index, setIndexSolution, length}) {
 
                         <Box sx={answerStyle}>
                             {task.solution.map((array, index) => {
-                                console.log(task._id, index)
-
                                 return (
-                                    <Box sx={{mt: '20px'}} key={`div ${task._id}${index}`}>
+                                    <Box  key={`div ${task._id}${index}`}>
                                         {
                                         array.map((text, index2) => {
                                             if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}><Box sx={{whiteSpace: 'pre-wrap'}}>{text}</Box></Typography>
@@ -301,7 +319,7 @@ function Solution({task, index, setIndexSolution, length}) {
                         </>
                         :
                         <>
-                            <ButtonOutlined onClick={resetSolve}>Скрыть решение</ButtonOutlined>
+                            <ButtonOutlined onClick={resetSolve}>Сбросить</ButtonOutlined>
                         </>
                         }
                     </Box>
@@ -356,7 +374,7 @@ function Solution({task, index, setIndexSolution, length}) {
                 </Box>
             </Box>
             
-            <Box>
+            <Box sx={{display: {xs: 'none', md: 'block'}}}>
                 <Box sx={{display: 'flex', flexDirection: 'row',  gap: '12px'}}>
                     {index === 1 ? '' :
                     (<Box sx={linkToTask} onClick={() => {
@@ -388,6 +406,163 @@ function Solution({task, index, setIndexSolution, length}) {
                     
                 </Box>
             </Box>
+            
+            {mediaDialog ? 
+            
+            <Dialog
+                fullScreen
+                open={isOpenDialog}
+                onClose={closeDialog}
+                
+                sx={{display: {xs: 'block', md: 'none'}}}
+            >   
+                <Box sx={dialogStyle}>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+                        <Box>
+                            <Typography sx={titleLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length)-5, (task._id.length))}</Typography>
+                            <Typography sx={bodyMainStyle}>{task.difficult} • {task.year} • {task.points} баллов</Typography>
+                        </Box>
+                        <IconButton onClick={closeDialog}>
+                            {/* {isOpenWindowSolution ? <KeyboardArrowUpIcon fontSize="large"></KeyboardArrowUpIcon> : <KeyboardArrowDownIcon fontSize="large"></KeyboardArrowDownIcon>}
+                             */}
+                            <CloseIcon fontSize="large"></CloseIcon>
+                        </IconButton>
+                    </Box>
+
+                    <Box variant='span' sx={{display: (isOpenWindowSolution ? 'block' : 'none')}}>
+
+                        {task.imageTasks.length !== 0 ? 
+                        <Box sx={{display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap'}}>
+                            {task.imageTasks.map((src, index) => {
+                                return (
+                                    <img src={src} alt={`Изображение ${index+1}`} style={{width: '100%', marginBottom: '16px', mixBlendMode: 'multiply'}} key={`image ${task._id}${index}`}/>                         
+                                );
+                            })}
+                        </Box>
+                        : ''}
+
+                        <Typography sx={descriptionStyle}>{task.description}</Typography>
+
+                        {task.subject !== 'programming' ? 
+                        <Box sx={groupTextFieldStyle}>
+                            <TextField id="answerInput" label="Ответ" variant="outlined"  sx={{width: '100%'}} disabled={!buttonHideSolution} 
+                                value={answerValue}
+                                onChange={(e) => {
+                                    setAnswerValue(e.target.value);
+                                    localStorage.setItem(`${task._id}`, `${e.target.value}`);
+                                }}
+                                type="number"
+                            />
+                            <Typography fontSize='small' sx={{color:'#B3261E', display: (isShowNotSuccessAlert ? 'block' : 'none')}}>{textNotSuccessAnswer}</Typography>
+                        </Box>
+                        : ''}
+
+                        <Box sx={solutionStyle}>
+                            {task.subject !== 'programming' ? 
+                            <>
+                                <Box variant='span' sx={{display: (isShowSuccessAlert ? 'block' : 'none')}}>
+                                    <Alert icon={false} sx={{borderRadius: '12px', bgcolor: theme.palette.grey.light}}
+                                    onClose={() => {setIsShowSuccessAlert(false)}}>🥳  Правильный ответ</Alert>
+                                </Box>
+                                <Box sx={{my: '16px'}}>
+                                    <Typography sx={titleMediumStyle}>Решение</Typography>
+                                    <Typography sx={bodyMainStyle}>Ответ: {task.answer}</Typography>
+                                </Box>
+                            </>
+                            : 
+                            <Box sx={{my: '16px'}}>
+                                    <Typography sx={titleMediumStyle}>Хотите узнать правильность решения? Воспользуйтесь chatGPT</Typography>
+                            </Box>
+                            }
+
+                            <Box sx={answerStyle}>
+                                {task.solution.map((array, index) => {
+                                    return (
+                                        <Box  key={`div ${task._id}${index}`}>
+                                            {
+                                            array.map((text, index2) => {
+                                                if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}><Box sx={{whiteSpace: 'pre-wrap'}}>{text}</Box></Typography>
+                                                else {
+                                                    return <Box sx={{width:'100%'}}>
+                                                            <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"
+                                                            key={`solutionText ${task._id}${index}.${index2}`} style={{width: '100%', mixBlendMode: 'multiply'}}/>
+                                                    </Box> 
+                                                    }
+                                            })
+                                            }
+                                        </Box>
+                                    );
+                                })}
+                            </Box>
+                        </Box>
+                        
+                        
+                        <Box sx={buttonGroupStyle}>
+                            {isHideAnswer ? 
+                            <>
+                                <ButtonOutlined onClick={showAnswer}>Показать решение</ButtonOutlined>
+                                {task.subject !== 'programming' ? 
+                                <ButtonContained onClick={checkAnswer}>Проверить</ButtonContained>
+                                : ''}
+                            </>
+                            :
+                            <>
+                                <ButtonOutlined onClick={resetSolve}>Сбросить</ButtonOutlined>
+                            </>
+                            }
+                        </Box>
+                        
+
+                        {(task.subject === 'programming') ? 
+                            <>
+                                <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', my: '20px', gap:'10px'}}>
+                                    <TextField type="file" id="fileInput"></TextField>
+                                    <Box sx={{display: 'flex', alignItems: 'center', flexWrap: 'wrap', mt: {md: '0px', xs: '10px'}, flexDirection: {xs: 'row-reverse', lg: 'row'}}}>
+                                        <ClickAwayListener onClickAway={CloseTooltip}>
+                                            <div>
+                                                <Tooltip
+                                                    PopperProps={{
+                                                    disablePortal: true,
+                                                    }}
+                                                    onClose={ToggleTooltip}
+                                                    open={IsOpenTooltip}
+                                                    disableFocusListener
+                                                    disableHoverListener
+                                                    disableTouchListener
+                                                    title="Если вы не понимаете, как решить задачу по программированию или хотите сравнить ваш ответ с авторским, можете воспользоваться помощью от чата GPT. Загрузите файл в нужном формате и убедитесь, что в вашем файле написан только необходимый код, чтобы GPT ответил наиболее точно, далее нажмите на кнопку отправки"
+                                                >
+                                                    <IconButton onClick={ToggleTooltip}>
+                                                        <QuestionMarkIcon></QuestionMarkIcon>
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </div>
+                                        </ClickAwayListener>
+                                        <ButtonContained onClick={requestToChatGPT}>
+                                            <img src={chatGptIcon} alt="gpticon" style={{width: '30px', marginRight: '4px'}}/>
+                                            <Box variant='span' sx={{mr: '4px'}}>GPT Помоги!</Box>
+                                        </ButtonContained>
+                                    </Box>
+                                </Box>
+                                
+                                {answerFromGPT ? 
+                                <>
+                                    <Typography sx={titleMediumStyle}>Ответ от GPT:</Typography>
+                                    <Typography sx={bodyLargeStyle}>
+                                        <Box sx={{width: '80%', whiteSpace: 'preserve'}}>{answerFromGPT}</Box>
+                                    </Typography>
+                                </>
+                                : 
+                                <>
+                                {IsLoading ? <img src={Loading} alt="Loading..." style={{mixBlendMode: 'multiply', width: '60px', height: '60px'}}/> : '' }
+                                </>
+                                }
+                            </> : ''
+                        }
+                        
+                    </Box>
+                </Box>
+            </Dialog>
+            : null}
         </>
     )
 }

@@ -9,11 +9,13 @@ function Filters() {
 
     const filterStyle = {
         display: 'flex',
-        flexDirection: {xs:'column', md: 'row'},
+        flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        gap: '10px',
-        my: '30px'
+        gap: '15px',
+        my: '30px',
+        p: '5px',
+        overflowX: {xs: 'scroll', md: 'visible'},        
     };
 
     let [dataForm, setDataForm] = useState({difficult: '', subject: 'math', year: ''});
@@ -50,13 +52,33 @@ function Filters() {
     
     return (
         <Box sx={filterStyle}>
-            <FormControl sx={{minWidth: 160, width: {md: 160, xs: '35vw'}}} size="small">
-                <InputLabel id="difficult-label" >Сложность</InputLabel>
+            <FormControl sx={{display: {md:'none'}, minWidth: 160, width: {md: 160, xs: '10vw'}}} size="small">
+                <InputLabel id="subject-label">Предмет</InputLabel>
+                <Select
+                    labelId="subject-label"
+                    id="subject-select"
+                    label="Предмет"
+                    sx={{borderRadius: '8px'}}
+                    onChange={controlForms}
+                    value={dataForm.subject}
+                    name='subject'
+                >
+                    <MenuItem value='math'>Математика</MenuItem>
+                    <MenuItem value='programming'>Программирование</MenuItem>
+                    <MenuItem value='physics'>Физика</MenuItem>
+                </Select>
+            </FormControl>
+
+            {/* <Box sx={{scrollbarWidth}}>
+
+            </Box> */}
+            <FormControl sx={{minWidth: 160, width: {md: 160, xs: '10vw'}}} size="small">
+                <InputLabel id="difficult-label">Сложность</InputLabel>
                 <Select
                     labelId="difficult-label"
                     id="difficult-select"
                     label="Сложность"
-                    sx={{borderRadius: '12px'}}
+                    sx={{borderRadius: '8px'}}
                     onChange={controlForms}
                     value={dataForm.difficult}
                     name='difficult'
@@ -67,7 +89,7 @@ function Filters() {
                     <MenuItem value='Тяжелая'>Тяжелая</MenuItem>
                 </Select>
             </FormControl>
-
+    
             <ToggleButtonGroup
                 color="primary"
                 aria-label="subjects"
@@ -75,20 +97,21 @@ function Filters() {
                 size="small"
                 value={dataForm.subject}
                 onChange={controlForms}
+                sx={{display: {md:'block', xs: 'none'}}}
             >
-                {/* <ToggleButton value="" sx={{textTransform: 'capitalize', color: 'black'}} name='subject'>Все</ToggleButton> */}
-                <ToggleButton value="math" sx={{textTransform: 'capitalize', color: 'black'}} name='subject'>Математика</ToggleButton>
-                <ToggleButton value="programming" sx={{textTransform: 'capitalize', color: 'black'}} name='subject'>Программирование</ToggleButton>
-                <ToggleButton value="physics" sx={{textTransform: 'capitalize', color: 'black'}} name='subject'>Физика</ToggleButton>
+                <ToggleButton value="math" sx={{textTransform: 'capitalize', color: 'black', width: '10vw', minWidth: '145px', borderRadius: '8px', height: '35px'}} name='subject'>Математика</ToggleButton>
+                <ToggleButton value="programming" sx={{textTransform: 'capitalize', color: 'black', width: '10vw', minWidth: '180px', height: '35px'}} name='subject'>Программирование</ToggleButton>
+                <ToggleButton value="physics" sx={{textTransform: 'capitalize', color: 'black', width: '10vw', minWidth: '145px', borderRadius: '8px', height: '35px'}} name='subject'>Физика</ToggleButton>
             </ToggleButtonGroup>
+
             
-            <FormControl sx={{minWidth: 160, width: {md: 160, xs: '35vw'}}} size="small">
+            <FormControl sx={{minWidth: 160, width: {md: 160, xs: '10vw'}}} size="small">
                 <InputLabel id="year-label">Год</InputLabel>
                 <Select
                     labelId="year-label"
                     id="year-select"
                     label="Год"
-                    sx={{borderRadius: '12px'}}
+                    sx={{borderRadius: '8px'}}
                     value={dataForm.year}
                     onChange={controlForms}
                     name='year'

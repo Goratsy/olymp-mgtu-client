@@ -12,15 +12,9 @@ function Catalog() {
 
     const {contextArrayTasks, numberOfPage, setPage, indexSolution, setIndexSolution} = useArrayContext();
     let {setAnswerValue, setIsHideAnswer} = useInfoSolutionContext();
-
-    // useEffect(() => {
-    //     fetch(`/allTasks/`)
-    //         .then((data) => data.json())
-    //         .then((res) => {setContextArrayTasks(data)})
-    //         .catch(err => {console.log(err);});
-    // }, []);
-
-    let changePage = (event, value) => {setPage(value);}
+    let changePage = (event, value) => {
+        setPage(value);
+    }
 
     const catalogStyle = {
         display: 'flex',
