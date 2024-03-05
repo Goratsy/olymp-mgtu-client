@@ -18,6 +18,8 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ErrorIcon from '@mui/icons-material/Error';
+import Markdown from 'react-markdown'
+
 
 function Solution({ task, index, setIndexSolution, length }) {
     const theme = useTheme();
@@ -235,7 +237,6 @@ function Solution({ task, index, setIndexSolution, length }) {
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
-            console.log('requestToChatGPT() =>', file);
 
             if (Math.ceil(Number(file.size) / 8) <= 1024 * 1024 && Math.ceil(Number(file.size) / 8) >= 15) {
                 setIsLoading(true);
@@ -256,7 +257,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                     })
                     .catch(error => {
                         console.error('Ошибка:', error);
-                        setIsLoading(false)
+                        setIsLoading(false);
                     });
             } else { alert('Размер файла должен быть от 15 Байт до 1МБ'); }
 
@@ -461,7 +462,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                     <Typography sx={titleMediumStyle}>Проверка решения</Typography>
                                     <Typography sx={bodyLargeStyle}>
                                         <Box sx={{ width: '80%', whiteSpace: 'preserve', mt: '16px' }}>
-                                            {answerFromGPT}
+                                            <Markdown>{answerFromGPT}</Markdown>
                                         </Box>
                                     </Typography>
                                 </Box>
@@ -719,7 +720,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                             <Typography sx={titleMediumStyle}>Проверка решения</Typography>
                                             <Typography sx={bodyLargeStyle}>
                                                 <Box sx={{ width: '80%', whiteSpace: 'preserve', mt: '16px' }}>
-                                                    {answerFromGPT}
+                                                    <Markdown>{answerFromGPT}</Markdown>
                                                 </Box>
                                             </Typography>
                                         </Box>
