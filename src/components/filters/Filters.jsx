@@ -4,7 +4,7 @@ import { useArrayContext, useInfoSolutionContext } from '../../App.js';
 import { urlBase } from "../../config.js";
 
 function Filters() {
-    let {setContextArrayTasks, setNumberOfPage, page, setIndexSolution} = useArrayContext();
+    let {setContextArrayTasks, setNumberOfPage, page, setIndexSolution, setPage} = useArrayContext();
     let {setIsHideAnswer, setTextNotSuccessAnswer, setAnswerFromGPT} = useInfoSolutionContext();
 
     const filterStyle = {
@@ -21,6 +21,8 @@ function Filters() {
     let [dataForm, setDataForm] = useState({difficult: '', subject: 'math', year: ''});
 
     let controlForms = (e) => {
+        setPage(1);
+
         try {
             if (e?.target.name === 'difficult') {
                 setDataForm({difficult: e.target.value, subject: dataForm.subject, year: dataForm.year});
@@ -39,6 +41,8 @@ function Filters() {
         setTextNotSuccessAnswer('');
         setAnswerFromGPT('');
         setIndexSolution(0); 
+
+
         fetch(`${urlBase}/taskByFilter/?difficult=${dataForm.difficult}&subject=${dataForm.subject}&year=${dataForm.year}&page=${page}`)
             .then(data => data.json())
             .then(res => {

@@ -328,13 +328,12 @@ function Solution({ task, index, setIndexSolution, length }) {
                                     <Typography sx={titleMediumStyle}>Решение</Typography>
                                     <Typography sx={bodyMainStyle}>Авторский код:</Typography>
                                 </Box>
-                                <Typography sx={{ whiteSpace: 'preserve' }}>
-                                    <Typography component={'pre'} style={{ margin: '0px' }}>
-                                        <Typography component={'code'}>
-                                            {task.answerCode}
-                                        </Typography>
-                                    </Typography>
-                                </Typography>
+
+
+                                <Markdown>
+                                    {task.answerCode}
+                                </Markdown>
+
                             </>
                         }
 
@@ -586,13 +585,11 @@ function Solution({ task, index, setIndexSolution, length }) {
                                             <Typography sx={titleMediumStyle}>Решение</Typography>
                                             <Typography sx={bodyMainStyle}>Авторский код:</Typography>
                                         </Box>
-                                        <Typography sx={{ whiteSpace: 'preserve' }}>
-                                            <Typography component={'pre'} style={{ margin: '0px' }}>
-                                                <Typography component={'code'}>
-                                                    {task.answerCode}
-                                                </Typography>
-                                            </Typography>
-                                        </Typography>
+
+                                        <Markdown>
+                                            {task.answerCode}
+                                        </Markdown>
+
                                     </>
                                 }
 
