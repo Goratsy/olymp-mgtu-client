@@ -10,8 +10,8 @@ function Catalog() {
     const theme = useTheme();
     const bgCard = theme.palette.violet.light;
 
-    const {contextArrayTasks, numberOfPage, setPage, indexSolution, setIndexSolution} = useArrayContext();
-    let {setAnswerValue, setIsHideAnswer} = useInfoSolutionContext();
+    const { contextArrayTasks, numberOfPage, setPage, indexSolution, setIndexSolution } = useArrayContext();
+    let { setAnswerValue, setIsHideAnswer } = useInfoSolutionContext();
     let changePage = (event, value) => {
         setPage(value);
     }
@@ -54,8 +54,8 @@ function Catalog() {
                                 }}></TaskCard>)
                         })}
                     </Box>
-                    <Box sx={{display: 'flex', justifyContent: 'center', mt: '30px'}}>
-                        <Pagination count={numberOfPage} variant="outlined" color="secondary" onChange={changePage}/>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: '30px' }}>
+                        <Pagination count={numberOfPage} variant="outlined" color="secondary" onChange={changePage} />
                     </Box>
                 </Box>
             }
