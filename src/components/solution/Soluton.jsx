@@ -9,8 +9,8 @@ import Alert from '@mui/material/Alert';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useInfoSolutionContext } from "../../App";
-import chatGptIcon from '../../assets/ChatGPT.svg';
-import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+// import chatGptIcon from '../../assets/ChatGPT.svg';
+// import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import Loading from '../../assets/loading1.svg';
 import { urlBase } from "../../config";
 import CloseIcon from '@mui/icons-material/Close';
@@ -18,7 +18,8 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ErrorIcon from '@mui/icons-material/Error';
-import Markdown from 'react-markdown'
+import Markdown from 'react-markdown';
+import MarkdownComponent from "../markdowncomponent/Markdown";
 
 
 function Solution({ task, index, setIndexSolution, length }) {
@@ -49,7 +50,8 @@ function Solution({ task, index, setIndexSolution, length }) {
         borderRadius: '12px',
         mb: '12px',
         p: '16px',
-        overflow: 'hidden'
+        overflow: 'hidden',
+
     };
 
     const dialogStyle = {
@@ -268,6 +270,12 @@ function Solution({ task, index, setIndexSolution, length }) {
 
     const closeDialog = () => { setIsOpenDialog(false); };
 
+    const markdown = `Here is some JavaScript code:
+
+    ~~~js
+    console.log('It works!')
+    ~~~
+    `;
 
     return (
         <>
@@ -310,6 +318,48 @@ function Solution({ task, index, setIndexSolution, length }) {
                         </Box>
                         : ''}
 
+                    {/* <Box>
+                        <SyntaxHighlighter language="javascript" style={paraisoLight}>
+                            {`
+function factorial(n) {
+    if (n === 0 || n === 1) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
+
+console.log(factorial(5)); // Выведет 120 (5! = 5 * 4 * 3 * 2 * 1)sfagasdasfdasdfhgdssfhahfafsgfsagasgsafgsafh
+                            
+                            `}
+                        </SyntaxHighlighter>
+                    </Box> */}
+
+                    {/* <Markdown
+                        children={markdown}
+                        components={{
+                            code(props) {
+                                const { children, className, node, ...rest } = props;
+                                const match = /language-(\w+)/.exec(className || '');
+                                console.log(match)
+                                return match ? (
+                                    <SyntaxHighlighter
+                                        {...rest}
+                                        PreTag="div"
+                                        children={String(children).replace(/\n$/, '')}
+                                        language={match[1]}
+                                        style={dark}
+                                    />
+                                ) : (
+                                    <code {...rest} className={className}>
+                                        {children}
+                                    </code>
+                                )
+                            }
+                        }}
+                    /> */}
+
+                    <MarkdownComponent></MarkdownComponent>
                     <Box sx={solutionStyle}>
                         {task.subject !== 'programming' ?
                             <>
@@ -462,7 +512,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                     <Typography sx={titleMediumStyle}>Проверка решения</Typography>
                                     <Typography sx={bodyLargeStyle}>
                                         <Box sx={{ width: '80%', whiteSpace: 'preserve', mt: '16px' }}>
-                                            <Markdown>{answerFromGPT}</Markdown>
+                                            <MarkdownComponent>{answerFromGPT}</MarkdownComponent>
                                         </Box>
                                     </Typography>
                                 </Box>
@@ -720,7 +770,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                             <Typography sx={titleMediumStyle}>Проверка решения</Typography>
                                             <Typography sx={bodyLargeStyle}>
                                                 <Box sx={{ width: '80%', whiteSpace: 'preserve', mt: '16px' }}>
-                                                    <Markdown>{answerFromGPT}</Markdown>
+                                                    <MarkdownComponent>{answerFromGPT}</MarkdownComponent>
                                                 </Box>
                                             </Typography>
                                         </Box>
