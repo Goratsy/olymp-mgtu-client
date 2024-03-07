@@ -639,7 +639,6 @@ console.log(factorial(5)); // Выведет 120 (5! = 5 * 4 * 3 * 2 * 1)sfagasd
                                         <Markdown>
                                             {task.answerCode}
                                         </Markdown>
-{/* sdfkls */}
                                     </>
                                 }
 
