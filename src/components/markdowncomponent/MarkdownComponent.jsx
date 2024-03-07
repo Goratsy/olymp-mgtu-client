@@ -7,7 +7,7 @@ import {prism} from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 function MarkdownComponent(props) {
     const markdown = props.children;
-    console.log('MarkdownComponent')
+
     return(
     <Markdown
         children={markdown}
@@ -16,7 +16,7 @@ function MarkdownComponent(props) {
         code(props) {
             const {children, className, node, ...rest} = props
             const match = /language-(\w+)/.exec(className || '')
-            console.log(className, rest);
+
             return match ? (
             <SyntaxHighlighter
                 {...rest}
