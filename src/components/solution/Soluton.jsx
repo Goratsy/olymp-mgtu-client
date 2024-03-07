@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, TextField, IconButton, Tooltip, ClickAwayListener, Dialog, useMediaQuery, Button, InputLabel } from "@mui/material";
+import { Box, Typography, TextField, IconButton, Dialog, useMediaQuery, InputLabel } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import SkipNextOutlinedIcon from '@mui/icons-material/SkipNextOutlined';
 import SkipPreviousOutlinedIcon from '@mui/icons-material/SkipPreviousOutlined';
@@ -19,7 +19,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ErrorIcon from '@mui/icons-material/Error';
 import Markdown from 'react-markdown';
-import MarkdownComponent from "../markdowncomponent/Markdown";
+import MarkdownComponent from "../markdowncomponent/MarkdownComponent";
+import MarkdownMath from "../markdownmath/MarkdownMath";
 
 
 function Solution({ task, index, setIndexSolution, length }) {
@@ -302,7 +303,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                         </Box>
                         : ''}
 
-                    <Typography sx={descriptionStyle}>{task.description}</Typography>
+                    <MarkdownMath sx={descriptionStyle}>{task.description}</MarkdownMath>
 
                     {task.subject !== 'programming' ?
                         <Box sx={groupTextFieldStyle}>
@@ -318,48 +319,6 @@ function Solution({ task, index, setIndexSolution, length }) {
                         </Box>
                         : ''}
 
-                    {/* <Box>
-                        <SyntaxHighlighter language="javascript" style={paraisoLight}>
-                            {`
-function factorial(n) {
-    if (n === 0 || n === 1) {
-        return 1;
-    } else {
-        return n * factorial(n - 1);
-    }
-}
-
-console.log(factorial(5)); // Выведет 120 (5! = 5 * 4 * 3 * 2 * 1)sfagasdasfdasdfhgdssfhahfafsgfsagasgsafgsafh
-                            
-                            `}
-                        </SyntaxHighlighter>
-                    </Box> */}
-
-                    {/* <Markdown
-                        children={markdown}
-                        components={{
-                            code(props) {
-                                const { children, className, node, ...rest } = props;
-                                const match = /language-(\w+)/.exec(className || '');
-                                console.log(match)
-                                return match ? (
-                                    <SyntaxHighlighter
-                                        {...rest}
-                                        PreTag="div"
-                                        children={String(children).replace(/\n$/, '')}
-                                        language={match[1]}
-                                        style={dark}
-                                    />
-                                ) : (
-                                    <code {...rest} className={className}>
-                                        {children}
-                                    </code>
-                                )
-                            }
-                        }}
-                    /> */}
-
-                    <MarkdownComponent></MarkdownComponent>
                     <Box sx={solutionStyle}>
                         {task.subject !== 'programming' ?
                             <>
@@ -379,10 +338,9 @@ console.log(factorial(5)); // Выведет 120 (5! = 5 * 4 * 3 * 2 * 1)sfagasd
                                     <Typography sx={bodyMainStyle}>Авторский код:</Typography>
                                 </Box>
 
-
-                                <Markdown>
+                                <MarkdownComponent>
                                     {task.answerCode}
-                                </Markdown>
+                                </MarkdownComponent>
 
                             </>
                         }
@@ -395,9 +353,9 @@ console.log(factorial(5)); // Выведет 120 (5! = 5 * 4 * 3 * 2 * 1)sfagasd
                                             array.map((text, index2) => {
                                                 if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}><Box sx={{ whiteSpace: 'pre-wrap' }}>{text}</Box></Typography>
                                                 else {
-                                                    return <Box sx={{ width: '100%' }}>
+                                                    return <Box sx={{ width: '100%' }} key={`solutionText ${task._id}${index}.${index2}`}>
                                                         <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"
-                                                            key={`solutionText ${task._id}${index}.${index2}`} style={{ width: '100%', mixBlendMode: 'multiply' }} />
+                                                             style={{ width: '100%', mixBlendMode: 'multiply' }} />
                                                     </Box>
                                                 }
                                             })
