@@ -10,8 +10,8 @@ function Catalog() {
     const theme = useTheme();
     const bgCard = theme.palette.violet.light;
 
-    const { contextArrayTasks, numberOfPage, setPage, indexSolution, setIndexSolution } = useArrayContext();
-    let { setAnswerValue, setIsHideAnswer } = useInfoSolutionContext();
+    const { contextArrayTasks, numberOfPage, setPage, indexSolution, setIndexSolution,  } = useArrayContext();
+    let { setAnswerValue, setIsHideAnswer, isOpenDialog } = useInfoSolutionContext();
     let changePage = (event, value) => {
         setPage(value);
     }
@@ -43,7 +43,7 @@ function Catalog() {
         }}>
             {contextArrayTasks.length === 0
                 ? '' :
-                <Box sx={{width: {md:'50%', xs: '100%'}}}>
+                <Box sx={{width: {md:'50%', xs: '100%'}, overflow: (isOpenDialog ? 'hidden' : 'visible')}}>
                     <Box sx={catalogStyle}>
                         {contextArrayTasks.map((data, index) => {
                             return (<TaskCard task={data} index={index + 1} current={(indexSolution === index)} key={data._id}

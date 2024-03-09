@@ -11,8 +11,10 @@ function ButtonOutlined(props) {
     const buttonStyle = {
         borderColor: bgColorButton,
         color: bgColorButton,
-        py: '10px',
-        px: '24px',
+        // py: '10px',
+        // px: '24px',
+        py: {md: '10px', xs: '7px'},
+        px: {md: '24px', xs: '20px'},
         borderRadius: '100px',
         textTransform: 'none',
         ':hover': {

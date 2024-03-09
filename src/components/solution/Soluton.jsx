@@ -58,8 +58,10 @@ function Solution({ task, index, setIndexSolution, length }) {
         flexDirection: 'column',
         gap: '12px',
         backgroundColor: bgCard,
-        height: '100%',
-        p: '16px'
+        p: '16px',
+        height: '500%',
+        overflowX: 'hidden'
+
     };
 
     const titleMediumStyle = {
@@ -340,8 +342,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                                 if (!(text.includes('https://'))) return <MarkdownMath key={`solutionText ${index}.${index2}`}>{text}</MarkdownMath>
                                                 else {
                                                     return <Box sx={{ width: '100%' }} key={`solutionText ${task._id}${index}.${index2}`}>
-                                                        <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"
-                                                             style={{ width: '100%', mixBlendMode: 'multiply' }} />
+                                                        <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy" style={{ width: '100%', mixBlendMode: 'multiply' }} />
                                                     </Box>
                                                 }
                                             })
@@ -360,7 +361,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                     <ButtonContained onClick={checkAnswer}>Проверить ответ</ButtonContained>
                                 </>
                                 :
-                                <ButtonOutlined onClick={resetSolve}>Сбросить</ButtonOutlined>
+                                <ButtonOutlined onClick={resetSolve}>Скрыть</ButtonOutlined>
                             }
                         </Box>
                         : ''}
@@ -518,7 +519,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                     open={isOpenDialog}
                     onClose={closeDialog}
 
-                    sx={{ display: { xs: 'block', md: 'none' } }}
+                    sx={{ display: { xs: 'block', md: 'none', }}}
                 >
 
 
@@ -580,9 +581,9 @@ function Solution({ task, index, setIndexSolution, length }) {
                                             <Typography sx={bodyMainStyle}>Авторский код:</Typography>
                                         </Box>
 
-                                        <Markdown>
+                                        <MarkdownComponent>
                                             {task.answerCode}
-                                        </Markdown>
+                                        </MarkdownComponent>
                                     </>
                                 }
 
@@ -594,9 +595,9 @@ function Solution({ task, index, setIndexSolution, length }) {
                                                     array.map((text, index2) => {
                                                         if (!(text.includes('https://'))) return <MarkdownMath key={`solutionText ${index}.${index2}`}>{text}</MarkdownMath>
                                                         else {
-                                                            return <Box sx={{ width: '100%' }}>
+                                                            return <Box sx={{ width: '100%' }} key={`solutionText ${task._id}${index}.${index2}`}>
                                                                 <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"
-                                                                    key={`solutionText ${task._id}${index}.${index2}`} style={{ width: '100%', mixBlendMode: 'multiply' }} />
+                                                                    style={{ width: '100%', mixBlendMode: 'multiply' }} />
                                                             </Box>
                                                         }
                                                     })
@@ -611,11 +612,11 @@ function Solution({ task, index, setIndexSolution, length }) {
                                 <Box sx={buttonGroupStyle}>
                                     {(isHideAnswer) ?
                                         <>
-                                            <ButtonOutlined onClick={showAnswer}>Показать решение</ButtonOutlined>
-                                            <ButtonContained onClick={checkAnswer}>Проверить ответ</ButtonContained>
+                                            <ButtonOutlined onClick={showAnswer}>Решение</ButtonOutlined>
+                                            <ButtonContained onClick={checkAnswer}>Проверить</ButtonContained>
                                         </>
                                         :
-                                        <ButtonOutlined onClick={resetSolve}>Сбросить</ButtonOutlined>
+                                        <ButtonOutlined onClick={resetSolve}>Скрыть</ButtonOutlined>
                                     }
                                 </Box>
                                 : ''}
