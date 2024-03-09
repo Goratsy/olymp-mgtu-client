@@ -9,8 +9,6 @@ import Alert from '@mui/material/Alert';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useInfoSolutionContext } from "../../App";
-// import chatGptIcon from '../../assets/ChatGPT.svg';
-// import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import Loading from '../../assets/loading1.svg';
 import { urlBase } from "../../config";
 import CloseIcon from '@mui/icons-material/Close';
@@ -84,11 +82,11 @@ function Solution({ task, index, setIndexSolution, length }) {
         color: theme.palette.black.main
     }
 
-    const descriptionStyle = {
-        ...theme.typography.body.main,
-        color: theme.palette.grey.dark,
+    // const descriptionStyle = {
+    //     ...theme.typography.body.main,
+    //     color: theme.palette.grey.dark,
 
-    }
+    // }
 
     const buttonGroupStyle = {
         display: 'flex',
@@ -147,14 +145,9 @@ function Solution({ task, index, setIndexSolution, length }) {
     let [isShowSuccessAlert, setIsShowSuccessAlert] = useState(true);
     let [isShowNotSuccessAlert, setIsShowNotSuccessAlert] = useState(false);
     let [buttonHideSolution, setButtonHideSolution] = useState(true);
-    let [IsOpenTooltip, setIsOpenTooltip] = useState(false);
     let [IsLoading, setIsLoading] = useState(false);
     let [filesList, setFilesList] = useState([]);
     let [isErrorFileList, setIsErrorFileList] = useState(false);
-
-
-    const CloseTooltip = () => { setIsOpenTooltip(false); };
-    const ToggleTooltip = () => { setIsOpenTooltip(!IsOpenTooltip); };
 
     let toggleWindowSolution = () => { setIsOpenWindowSolution(!isOpenWindowSolution) };
 
@@ -271,13 +264,6 @@ function Solution({ task, index, setIndexSolution, length }) {
 
     const closeDialog = () => { setIsOpenDialog(false); };
 
-    const markdown = `Here is some JavaScript code:
-
-    ~~~js
-    console.log('It works!')
-    ~~~
-    `;
-
     return (
         <>
             <Box sx={taskStyle}>
@@ -303,7 +289,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                         </Box>
                         : ''}
 
-                    <MarkdownMath sx={descriptionStyle}>{task.description}</MarkdownMath>
+                    <MarkdownMath>{task.description}</MarkdownMath>
 
                     {task.subject !== 'programming' ?
                         <Box sx={groupTextFieldStyle}>
@@ -316,7 +302,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                 type="number"
                             />
                             <Typography fontSize='small' sx={{ color: '#B3261E', display: (isShowNotSuccessAlert ? 'block' : 'none') }}>{textNotSuccessAnswer}</Typography>
-                        </Box>
+                        </Box> 
                         : ''}
 
                     <Box sx={solutionStyle}>
@@ -351,7 +337,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                     <Box key={`div ${task._id}${index}`}>
                                         {
                                             array.map((text, index2) => {
-                                                if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}><Box sx={{ whiteSpace: 'pre-wrap' }}>{text}</Box></Typography>
+                                                if (!(text.includes('https://'))) return <MarkdownMath key={`solutionText ${index}.${index2}`}>{text}</MarkdownMath>
                                                 else {
                                                     return <Box sx={{ width: '100%' }} key={`solutionText ${task._id}${index}.${index2}`}>
                                                         <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"
@@ -559,7 +545,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                 </Box>
                                 : ''}
 
-                            <Typography sx={descriptionStyle}>{task.description}</Typography>
+                            <MarkdownMath>{task.description}</MarkdownMath>
 
                             {task.subject !== 'programming' ?
                                 <Box sx={groupTextFieldStyle}>
@@ -606,7 +592,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                             <Box key={`div ${task._id}${index}`}>
                                                 {
                                                     array.map((text, index2) => {
-                                                        if (!(text.includes('https://'))) return <Typography sx={bodyLargeStyle} key={`solutionText ${index}.${index2}`}><Box sx={{ whiteSpace: 'pre-wrap' }}>{text}</Box></Typography>
+                                                        if (!(text.includes('https://'))) return <MarkdownMath key={`solutionText ${index}.${index2}`}>{text}</MarkdownMath>
                                                         else {
                                                             return <Box sx={{ width: '100%' }}>
                                                                 <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"

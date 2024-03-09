@@ -1,6 +1,6 @@
 import React from "react";
 import Tex2SVG from "react-hook-mathjax";
-import {Typography} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import { useTheme } from "@emotion/react";
 
 function MarkdownMath(props) {
@@ -10,12 +10,10 @@ function MarkdownMath(props) {
     const descriptionStyle = {
         ...theme.typography.body.main,
         color: theme.palette.grey.dark,
-
     }
     return (
-        <>
+        <Box>
             {markdown.split('$$').map((elArr, index) => {
-                console.log(elArr)
                 if (elArr[0] === '$') {
                     return (
                         <Tex2SVG display="inline" latex={elArr.slice(1)} key={index}/>
@@ -28,7 +26,7 @@ function MarkdownMath(props) {
 
             })}
 
-        </>
+        </Box>
     );
 }
 

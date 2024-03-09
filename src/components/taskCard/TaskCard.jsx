@@ -5,6 +5,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useInfoSolutionContext } from "../../App";
+import MarkdownMath from "../markdownmath/MarkdownMath";
 
 function TaskCard({task, index, current, onClickTask}) {
     const theme = useTheme();
@@ -57,7 +58,7 @@ function TaskCard({task, index, current, onClickTask}) {
                 <Box sx={{width: '90%', overflow: 'hidden'}}>
                     <Typography  sx={labelMainStyle}>{task.difficult} • {task.year}</Typography>
                     <Typography sx={bodyLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length)-5, (task._id.length))}</Typography>
-                    <Typography sx={descriptionStyle}>{task.description.split(' ').slice(0, 15).join(' ')+'...'}</Typography> 
+                    <MarkdownMath sx={descriptionStyle}>{task.description.split(' ').slice(0, 15).join(' ')+'...'}</MarkdownMath> 
                     {/* <Typography sx={descriptionStyle}>{task.description}</Typography> */}
                 </Box>
                 <Box sx={{width: '5%'}}>

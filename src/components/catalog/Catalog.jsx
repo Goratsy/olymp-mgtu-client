@@ -1,5 +1,5 @@
-import { Box, Grid, Typography, Pagination } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Typography, Pagination } from "@mui/material";
+import React from "react";
 import TaskCard from "../taskCard/TaskCard";
 import Solution from "../solution/Soluton";
 import { useInfoSolutionContext, useArrayContext } from '../../App.js';
