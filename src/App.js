@@ -123,7 +123,6 @@ function App() {
       <ArrayContext.Provider value={{contextArrayTasks, setContextArrayTasks, numberOfPage, setNumberOfPage, page, setPage, indexSolution, setIndexSolution}}>
         <InfoSolutionContext.Provider value={{answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer, textNotSuccessAnswer, setTextNotSuccessAnswer, answerFromGPT, setAnswerFromGPT, isOpenDialog, setIsOpenDialog}}>
             <Box sx={{
-              pt: "12px",
               pb: '12px'
             }}>
               <Navbar></Navbar>

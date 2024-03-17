@@ -8,7 +8,7 @@ import ButtonContained from "../buttonContained/buttonContained";
 import Alert from '@mui/material/Alert';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { useInfoSolutionContext } from "../../App";
+import { useArrayContext, useInfoSolutionContext } from "../../App";
 import Loading from '../../assets/loading1.svg';
 import { urlBase } from "../../config";
 import CloseIcon from '@mui/icons-material/Close';
@@ -21,11 +21,12 @@ import MarkdownComponent from "../markdowncomponent/MarkdownComponent";
 import MarkdownMath from "../markdownmath/MarkdownMath";
 
 
-function Solution({ task, index, setIndexSolution, length }) {
+function Solution({ task, index, setIndexSolution, length, previosIndexTask, nextIndexTask }) {
     const theme = useTheme();
     const bgCard = theme.palette.violet.light;
     let mediaDialog = useMediaQuery('(max-width:900px)');
     let { answerValue, setAnswerValue, isHideAnswer, setIsHideAnswer, textNotSuccessAnswer, setTextNotSuccessAnswer, answerFromGPT, setAnswerFromGPT, isOpenDialog, setIsOpenDialog } = useInfoSolutionContext();
+    const { contextArrayTasks } = useArrayContext();
 
     const inputFilesStyle = {
         width: '100%',
@@ -265,13 +266,15 @@ function Solution({ task, index, setIndexSolution, length }) {
     }
 
     const closeDialog = () => { setIsOpenDialog(false); };
+    // console.log('Solution',previosIndexTask, nextIndexTask);
 
     return (
         <>
             <Box sx={taskStyle}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Box>
-                        <Typography sx={titleLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length) - 5, (task._id.length))}</Typography>
+                        {/* <Typography sx={titleLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length) - 5, (task._id.length))}</Typography> */}
+                        <Typography sx={titleLargeStyle}>Задача {task.idTask}</Typography>
                         <Typography sx={bodyMainStyle}>{task.difficult} • {task.year} • {task.points} баллов</Typography>
                     </Box>
                     <IconButton onClick={toggleWindowSolution}>
@@ -491,7 +494,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                 <SkipPreviousOutlinedIcon sx={{ fontSize: '24px', }}></SkipPreviousOutlinedIcon>
                                 <Typography sx={titleMediumVioletStyle}>Предыдущая</Typography>
                             </Box>
-                            <Typography sx={subtitle1Style}>Задача {index - 1}</Typography>
+                            <Typography sx={subtitle1Style}>Задача {contextArrayTasks[index - 2].idTask}</Typography>
                         </Box>)
                     }
 
@@ -505,7 +508,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                 <Typography sx={titleMediumVioletStyle}>Следующая</Typography>
                                 <SkipNextOutlinedIcon sx={{ fontSize: '24px' }}></SkipNextOutlinedIcon>
                             </Box>
-                            <Typography sx={subtitle1Style}>Задача {index + 1}</Typography>
+                            <Typography sx={subtitle1Style}>Задача {contextArrayTasks[index].idTask}</Typography>
                         </Box>)
                     }
 
@@ -513,20 +516,17 @@ function Solution({ task, index, setIndexSolution, length }) {
             </Box>
 
             {mediaDialog ?
-
                 <Dialog
                     fullScreen
                     open={isOpenDialog}
                     onClose={closeDialog}
-
                     sx={{ display: { xs: 'block', md: 'none', }}}
                 >
-
-
                     <Box sx={dialogStyle}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <Box>
-                                <Typography sx={titleLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length) - 5, (task._id.length))}</Typography>
+                                {/* <Typography sx={titleLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length) - 5, (task._id.length))}</Typography> */}
+                                <Typography sx={titleLargeStyle}>Задача {task.idTask}</Typography>
                                 <Typography sx={bodyMainStyle}>{task.difficult} • {task.year} • {task.points} баллов</Typography>
                             </Box>
                             <IconButton onClick={closeDialog}>

@@ -1,5 +1,5 @@
 import { Box, Typography, Pagination } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import TaskCard from "../taskCard/TaskCard";
 import Solution from "../solution/Soluton";
 import { useInfoSolutionContext, useArrayContext } from '../../App.js';
@@ -10,7 +10,7 @@ function Catalog() {
     const theme = useTheme();
     const bgCard = theme.palette.violet.light;
 
-    const { contextArrayTasks, numberOfPage, setPage, indexSolution, setIndexSolution,  } = useArrayContext();
+    const { contextArrayTasks, numberOfPage, setPage, indexSolution, setIndexSolution } = useArrayContext();
     let { setAnswerValue, setIsHideAnswer, isOpenDialog } = useInfoSolutionContext();
     let changePage = (event, value) => {
         setPage(value);
@@ -34,6 +34,7 @@ function Catalog() {
         p: '16px',
         overflow: 'hidden'
     };
+
     return (
         <Box sx={{ display: 'flex', 
         flexDirection: { md: 'row', xs: 'column' }, 
@@ -62,7 +63,9 @@ function Catalog() {
             <Box sx={{width: '50%'}}>
                 {(contextArrayTasks.length !== 0 && contextArrayTasks.length > indexSolution) ?
                     <Solution task={contextArrayTasks[indexSolution]} index={indexSolution + 1}
-                        setIndexSolution={setIndexSolution} length={contextArrayTasks.length}></Solution>
+                        setIndexSolution={setIndexSolution} length={contextArrayTasks.length}
+                        indexPreviosTask={contextArrayTasks}
+                        ></Solution>
                     : ''}
 
                 {contextArrayTasks.length <= indexSolution && contextArrayTasks.length !== 0 ?

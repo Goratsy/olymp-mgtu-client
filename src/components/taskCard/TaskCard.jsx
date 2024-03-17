@@ -29,12 +29,7 @@ function TaskCard({task, index, current, onClickTask}) {
         ...theme.typography.body.large,
         color: theme.palette.black.dark,
     };
-    // const descriptionStyle = {
-    //     ...theme.typography.body.main,
-    //     color: theme.palette.grey.dark,
-    //     width: '80%',
-    //     height: {md: '40px', xs: '60px'}
-    // };
+
 
     const descriptionStyle = {
         ...theme.typography.body.main,
@@ -57,9 +52,9 @@ function TaskCard({task, index, current, onClickTask}) {
                 </Box>
                 <Box sx={{width: '90%', overflow: 'hidden'}}>
                     <Typography  sx={labelMainStyle}>{task.difficult} • {task.year}</Typography>
-                    <Typography sx={bodyLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length)-5, (task._id.length))}</Typography>
+                    {/* <Typography sx={bodyLargeStyle}>Задача {task._id.slice(0, 4) + task._id.slice((task._id.length)-5, (task._id.length))}</Typography> */}
+                    <Typography sx={bodyLargeStyle}>Задача {task.idTask}</Typography>
                     <MarkdownMath sx={descriptionStyle}>{task.description.split(' ').slice(0, 15).join(' ')+'...'}</MarkdownMath> 
-                    {/* <Typography sx={descriptionStyle}>{task.description}</Typography> */}
                 </Box>
                 <Box sx={{width: '5%'}}>
                     <ArrowRightIcon sx={{fontSize: '24px'}}></ArrowRightIcon>
