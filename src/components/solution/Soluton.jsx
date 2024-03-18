@@ -287,14 +287,16 @@ function Solution({ task, index, setIndexSolution, length }) {
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
                             {task.imageTasks.map((src, index) => {
                                 return (
-                                    <img src={src} alt={`Изображение ${index + 1}`} style={{ width: '100%', marginBottom: '16px', mixBlendMode: 'multiply' }} key={`image ${task._id}${index}`} />
+                                    <Box sx={{width: {md: '70%', xs: '100%'}}}>
+                                        <img src={src} alt={`Изображение ${index + 1}`} style={{ width: '100%', marginBottom: '16px', mixBlendMode: 'multiply' }} key={`image ${task._id}${index}`} />
+                                    </Box>
                                 );
                             })}
                         </Box>
                         : ''}
 
                     <MarkdownMath>{task.description}</MarkdownMath>
-
+                  
                     {task.subject !== 'programming' ?
                         <Box sx={groupTextFieldStyle}>
                             <TextField id="answerInput" label="Ответ" variant="outlined" sx={{ width: '100%' }} disabled={!buttonHideSolution}
@@ -341,7 +343,9 @@ function Solution({ task, index, setIndexSolution, length }) {
                                     <Box key={`div ${task._id}${index}`}>
                                         {
                                             array.map((text, index2) => {
-                                                if (!(text.includes('https://'))) return <MarkdownMath key={`solutionText ${index}.${index2}`}>{text}</MarkdownMath>
+                                                if (!(text.includes('https://'))) {
+                                                    return <Box sx={{lineHeight: '32px'}}><MarkdownMath key={`solutionText ${index}.${index2}`}>{text}</MarkdownMath></Box>
+                                                }
                                                 else {
                                                     return <Box sx={{ width: '100%' }} key={`solutionText ${task._id}${index}.${index2}`}>
                                                         <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy" style={{ width: '100%', mixBlendMode: 'multiply' }} />
@@ -539,7 +543,9 @@ function Solution({ task, index, setIndexSolution, length }) {
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '20px', flexWrap: 'wrap' }}>
                                     {task.imageTasks.map((src, index) => {
                                         return (
-                                            <img src={src} alt={`Изображение ${index + 1}`} style={{ width: '100%', marginBottom: '16px', mixBlendMode: 'multiply' }} key={`image ${task._id}${index}`} />
+                                            <Box sx={{width: {md: '50%', xs: '100%'}}}>
+                                                <img src={src} alt={`Изображение ${index + 1}`} style={{ width: '100%', marginBottom: '16px', mixBlendMode: 'multiply' }} key={`image ${task._id}${index}`} />
+                                            </Box>
                                         );
                                     })}
                                 </Box>
@@ -592,7 +598,7 @@ function Solution({ task, index, setIndexSolution, length }) {
                                             <Box key={`div ${task._id}${index}`}>
                                                 {
                                                     array.map((text, index2) => {
-                                                        if (!(text.includes('https://'))) return <MarkdownMath key={`solutionText ${index}.${index2}`}>{text}</MarkdownMath>
+                                                        if (!(text.includes('https://'))) return <Box sx={{lineHeight: '32px'}}><MarkdownMath key={`solutionText ${index}.${index2}`}>{text}</MarkdownMath></Box>
                                                         else {
                                                             return <Box sx={{ width: '100%' }} key={`solutionText ${task._id}${index}.${index2}`}>
                                                                 <img src={`${text}`} alt={`Изображение решения ${index}.${index2}`} loading="lazy"

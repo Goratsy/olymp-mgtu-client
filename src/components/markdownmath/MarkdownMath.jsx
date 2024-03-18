@@ -10,6 +10,8 @@ function MarkdownMath(props) {
     const descriptionStyle = {
         ...theme.typography.body.main,
         color: theme.palette.grey.dark,
+        fontSize: '15px',
+        lineHeight: '24px'
     }
     return (
         <Box>
