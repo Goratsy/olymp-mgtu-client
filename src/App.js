@@ -113,7 +113,7 @@ function App() {
   let [answerValue, setAnswerValue] = useState('');
   let [isHideAnswer, setIsHideAnswer] = useState(true);
   let [textNotSuccessAnswer, setTextNotSuccessAnswer] = useState('');
-  let [answerFromGPT, setAnswerFromGPT] = useState('');
+  let [answerFromGPT, setAnswerFromGPT] = useState(``);
   let [indexSolution, setIndexSolution] = useState(0);
 
   const [isOpenDialog, setIsOpenDialog] = useState(false);

@@ -21,7 +21,7 @@ import MarkdownComponent from "../markdowncomponent/MarkdownComponent";
 import MarkdownMath from "../markdownmath/MarkdownMath";
 
 
-function Solution({ task, index, setIndexSolution, length, previosIndexTask, nextIndexTask }) {
+function Solution({ task, index, setIndexSolution, length }) {
     const theme = useTheme();
     const bgCard = theme.palette.violet.light;
     let mediaDialog = useMediaQuery('(max-width:900px)');
@@ -266,7 +266,6 @@ function Solution({ task, index, setIndexSolution, length, previosIndexTask, nex
     }
 
     const closeDialog = () => { setIsOpenDialog(false); };
-    // console.log('Solution',previosIndexTask, nextIndexTask);
 
     return (
         <>
